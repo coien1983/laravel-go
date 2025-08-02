@@ -13,7 +13,7 @@ type ProjectConfig struct {
 	Architecture  string // "monolithic" | "microservice"
 	Database      string // "sqlite" | "mysql" | "postgresql"
 	Cache         string // "memory" | "redis" | "memcached"
-	Queue         string // "memory" | "redis" | "rabbitmq"
+	Queue         string // "memory" | "redis" | "rabbitmq" | "kafka" | "sqs" | "beanstalkd" | "database"
 	Frontend      string // "api" | "blade" | "vue" | "react"
 	Auth          string // "jwt" | "session" | "none"
 	API           string // "rest" | "graphql" | "both"
@@ -82,7 +82,11 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	config.Queue = askChoice("请选择队列系统:", []string{
 		"memory - 内存队列 (开发环境)",
 		"redis - Redis 队列 (生产环境)",
-		"rabbitmq - RabbitMQ (企业级)",
+		"rabbitmq - RabbitMQ (企业级消息队列)",
+		"kafka - Apache Kafka (分布式流处理)",
+		"sqs - AWS SQS (云服务队列)",
+		"beanstalkd - Beanstalkd (轻量级队列)",
+		"database - 数据库队列 (基于数据库)",
 	}, "memory", output)
 
 	// 前端选择

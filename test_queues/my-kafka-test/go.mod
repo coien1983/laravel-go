@@ -1,4 +1,4 @@
-module my-timer-app
+module my-kafka-test
 
 go 1.21
 

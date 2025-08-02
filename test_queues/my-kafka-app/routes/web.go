@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 	"github.com/gorilla/mux"
-	"my-timer-app/app/controllers"
+	"my-kafka-app/app/controllers"
 )
 
 // RegisterWebRoutes 注册 Web 路由

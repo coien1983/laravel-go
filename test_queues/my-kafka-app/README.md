@@ -1,4 +1,4 @@
-# my-timer-app
+# my-kafka-app
 
 一个基于 Laravel-Go Framework 构建的完整 Web 应用。
 
