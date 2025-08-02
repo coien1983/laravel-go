@@ -19,7 +19,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/laravel-go.git
+git clone https://github.com/coien1983/laravel-go.git
 cd laravel-go
 
 # 安装依赖
@@ -105,7 +105,7 @@ func WebRoutes(router routing.Router) {
     router.Get("/", "HomeController@index")
     router.Get("/users", "UserController@index")
     router.Post("/users", "UserController@store")
-    
+
     router.Group("/api", func(router routing.Router) {
         router.Get("/users", "Api\\UserController@index")
         router.Post("/users", "Api\\UserController@store")
@@ -138,7 +138,7 @@ func (c *UserController) Store(request http.Request) http.Response {
         "name":  "required|string|max:255",
         "email": "required|email|unique:users",
     }))
-    
+
     return c.Json(user, 201)
 }
 ```
@@ -189,7 +189,7 @@ func (m *AuthMiddleware) Handle(request http.Request, next http.Next) http.Respo
             "error": "Unauthenticated",
         }, 401)
     }
-    
+
     return next(request)
 }
 ```
@@ -307,19 +307,19 @@ spec:
         app: laravel-go-app
     spec:
       containers:
-      - name: app
-        image: laravel-go-app:latest
-        ports:
-        - containerPort: 8080
-        env:
-        - name: APP_ENV
-          value: "production"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
+        - name: app
+          image: laravel-go-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_ENV
+              value: "production"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
 ```
 
 ## 测试
@@ -347,10 +347,10 @@ go tool cover -html=coverage.out
 ## 支持
 
 - 📖 [文档](https://laravel-go.dev)
-- 💬 [讨论区](https://github.com/your-username/laravel-go/discussions)
-- 🐛 [问题反馈](https://github.com/your-username/laravel-go/issues)
+- 💬 [讨论区](https://github.com/coien1983/laravel-go/discussions)
+- 🐛 [问题反馈](https://github.com/coien1983/laravel-go/issues)
 - 📧 [邮件支持](mailto:support@laravel-go.dev)
 
 ## 致谢
 
-感谢 Laravel 框架的启发，以及所有为 Go 生态系统做出贡献的开发者。 
+感谢 Laravel 框架的启发，以及所有为 Go 生态系统做出贡献的开发者。

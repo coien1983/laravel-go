@@ -285,7 +285,7 @@ go run main.go
 
 ## 文档
 
-更多信息请参考 [Laravel-Go Framework 文档](https://github.com/your-username/laravel-go)`,
+更多信息请参考 [Laravel-Go Framework 文档](https://github.com/coien1983/laravel-go)`,
 		".gitignore": `# 编译输出
 *.exe
 *.exe~

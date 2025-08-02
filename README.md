@@ -19,7 +19,7 @@ A Go language development framework based on Laravel design principles, designed
 
 ```bash
 # Clone the project
-git clone https://github.com/your-username/laravel-go.git
+git clone https://github.com/coien1983/laravel-go.git
 cd laravel-go
 
 # Install dependencies
@@ -347,8 +347,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Support
 
 - 📖 [Documentation](https://laravel-go.dev)
-- 💬 [Discussions](https://github.com/your-username/laravel-go/discussions)
-- 🐛 [Issue Tracker](https://github.com/your-username/laravel-go/issues)
+- 💬 [Discussions](https://github.com/coien1983/laravel-go/discussions)
+- 🐛 [Issue Tracker](https://github.com/coien1983/laravel-go/issues)
 - 📧 [Email Support](mailto:support@laravel-go.dev)
 
 ## Acknowledgments
