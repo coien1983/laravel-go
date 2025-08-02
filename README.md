@@ -25,11 +25,18 @@ cd laravel-go
 # Install dependencies
 go mod download
 
+# Build the largo command
+make build
+
 # View available commands
-go run cmd/artisan/main.go
+./bin/largo
 
 # Initialize a new Laravel-Go project
-go run cmd/artisan/main.go init
+./bin/largo init
+
+# Or install globally (optional)
+make install
+largo init
 ```
 
 ### Create New Project

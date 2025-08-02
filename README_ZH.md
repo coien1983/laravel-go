@@ -25,11 +25,18 @@ cd laravel-go
 # 安装依赖
 go mod download
 
+# 构建 largo 命令
+make build
+
 # 查看可用命令
-go run cmd/artisan/main.go
+./bin/largo
 
 # 初始化新的 Laravel-Go 项目
-go run cmd/artisan/main.go init
+./bin/largo init
+
+# 或者全局安装（可选）
+make install
+largo init
 ```
 
 ### 创建新项目

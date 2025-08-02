@@ -3,6 +3,7 @@
 
 # 变量定义
 ARTISAN := go run cmd/artisan/main.go
+LARGO := ./bin/largo
 APP_NAME := laravel-go-app
 PORT := 8080
 NAMESPACE := default
@@ -20,143 +21,143 @@ help: ## 显示帮助信息
 # =============================================================================
 
 .PHONY: init
-init: ## 初始化新项目
-	$(ARTISAN) init
+init: build ## 初始化新项目
+	$(LARGO) init
 
 .PHONY: init-custom
-init-custom: ## 使用自定义名称初始化项目
+init-custom: build ## 使用自定义名称初始化项目
 	@read -p "请输入项目名称: " name; \
-	$(ARTISAN) init --name=$$name
+	$(LARGO) init --name=$$name
 
 # =============================================================================
 # 代码生成
 # =============================================================================
 
 .PHONY: controller
-controller: ## 生成控制器 (需要指定名称)
+controller: build ## 生成控制器 (需要指定名称)
 	@read -p "请输入控制器名称: " name; \
-	$(ARTISAN) make:controller $$name
+	$(LARGO) make:controller $$name
 
 .PHONY: controller-custom
-controller-custom: ## 生成控制器 (指定名称和命名空间)
+controller-custom: build ## 生成控制器 (指定名称和命名空间)
 	@read -p "请输入控制器名称: " name; \
 	read -p "请输入命名空间 (默认: app): " namespace; \
-	$(ARTISAN) make:controller $$name --namespace=$${namespace:-app}
+	$(LARGO) make:controller $$name --namespace=$${namespace:-app}
 
 .PHONY: model
-model: ## 生成模型 (需要指定名称)
+model: build ## 生成模型 (需要指定名称)
 	@read -p "请输入模型名称: " name; \
-	$(ARTISAN) make:model $$name
+	$(LARGO) make:model $$name
 
 .PHONY: model-fields
-model-fields: ## 生成模型 (指定名称和字段)
+model-fields: build ## 生成模型 (指定名称和字段)
 	@read -p "请输入模型名称: " name; \
 	read -p "请输入字段 (格式: name:string,email:string,age:int): " fields; \
-	$(ARTISAN) make:model $$name --fields=$$fields
+	$(LARGO) make:model $$name --fields=$$fields
 
 .PHONY: middleware
-middleware: ## 生成中间件 (需要指定名称)
+middleware: build ## 生成中间件 (需要指定名称)
 	@read -p "请输入中间件名称: " name; \
-	$(ARTISAN) make:middleware $$name
+	$(LARGO) make:middleware $$name
 
 .PHONY: migration
-migration: ## 生成迁移文件 (需要指定名称)
+migration: build ## 生成迁移文件 (需要指定名称)
 	@read -p "请输入迁移名称: " name; \
-	$(ARTISAN) make:migration $$name
+	$(LARGO) make:migration $$name
 
 .PHONY: migration-table
-migration-table: ## 生成迁移文件 (指定名称和表名)
+migration-table: build ## 生成迁移文件 (指定名称和表名)
 	@read -p "请输入迁移名称: " name; \
 	read -p "请输入表名: " table; \
-	$(ARTISAN) make:migration $$name --table=$$table
+	$(LARGO) make:migration $$name --table=$$table
 
 .PHONY: migration-fields
-migration-fields: ## 生成迁移文件 (指定名称、表名和字段)
+migration-fields: build ## 生成迁移文件 (指定名称、表名和字段)
 	@read -p "请输入迁移名称: " name; \
 	read -p "请输入表名: " table; \
 	read -p "请输入字段 (格式: name:string,email:string,age:int): " fields; \
-	$(ARTISAN) make:migration $$name --table=$$table --fields=$$fields
+	$(LARGO) make:migration $$name --table=$$table --fields=$$fields
 
 .PHONY: test
-test: ## 生成测试文件 (需要指定名称)
+test: build ## 生成测试文件 (需要指定名称)
 	@read -p "请输入测试名称: " name; \
-	$(ARTISAN) make:test $$name
+	$(LARGO) make:test $$name
 
 .PHONY: test-type
-test-type: ## 生成测试文件 (指定名称和类型)
+test-type: build ## 生成测试文件 (指定名称和类型)
 	@read -p "请输入测试名称: " name; \
 	read -p "请输入测试类型 (unit/integration): " type; \
-	$(ARTISAN) make:test $$name --type=$$type
+	$(LARGO) make:test $$name --type=$$type
 
 # =============================================================================
 # 部署配置生成
 # =============================================================================
 
 .PHONY: docker
-docker: ## 生成 Docker 配置文件 (使用默认配置)
-	$(ARTISAN) make:docker
+docker: build ## 生成 Docker 配置文件 (使用默认配置)
+	$(LARGO) make:docker
 
 .PHONY: docker-custom
-docker-custom: ## 生成 Docker 配置文件 (自定义配置)
+docker-custom: build ## 生成 Docker 配置文件 (自定义配置)
 	@read -p "请输入应用名称 (默认: $(APP_NAME)): " name; \
 	read -p "请输入端口 (默认: $(PORT)): " port; \
 	read -p "请输入环境 (development/production, 默认: development): " env; \
-	$(ARTISAN) make:docker --name=$${name:-$(APP_NAME)} --port=$${port:-$(PORT)} --env=$${env:-development}
+	$(LARGO) make:docker --name=$${name:-$(APP_NAME)} --port=$${port:-$(PORT)} --env=$${env:-development}
 
 .PHONY: k8s
-k8s: ## 生成 Kubernetes 配置文件 (使用默认配置)
-	$(ARTISAN) make:k8s
+k8s: build ## 生成 Kubernetes 配置文件 (使用默认配置)
+	$(LARGO) make:k8s
 
 .PHONY: k8s-custom
-k8s-custom: ## 生成 Kubernetes 配置文件 (自定义配置)
+k8s-custom: build ## 生成 Kubernetes 配置文件 (自定义配置)
 	@read -p "请输入应用名称 (默认: $(APP_NAME)): " name; \
 	read -p "请输入副本数量 (默认: $(REPLICAS)): " replicas; \
 	read -p "请输入端口 (默认: $(PORT)): " port; \
 	read -p "请输入命名空间 (默认: $(NAMESPACE)): " namespace; \
-	$(ARTISAN) make:k8s --name=$${name:-$(APP_NAME)} --replicas=$${replicas:-$(REPLICAS)} --port=$${port:-$(PORT)} --namespace=$${namespace:-$(NAMESPACE)}
+	$(LARGO) make:k8s --name=$${name:-$(APP_NAME)} --replicas=$${replicas:-$(REPLICAS)} --port=$${port:-$(PORT)} --namespace=$${namespace:-$(NAMESPACE)}
 
 # =============================================================================
 # 项目维护
 # =============================================================================
 
 .PHONY: routes
-routes: ## 列出所有路由
-	$(ARTISAN) route:list
+routes: build ## 列出所有路由
+	$(LARGO) route:list
 
 .PHONY: cache-clear
-cache-clear: ## 清除应用缓存
-	$(ARTISAN) cache:clear
+cache-clear: build ## 清除应用缓存
+	$(LARGO) cache:clear
 
 .PHONY: list
-list: ## 列出所有可用命令
-	$(ARTISAN) list
+list: build ## 列出所有可用命令
+	$(LARGO) list
 
 .PHONY: version
-version: ## 显示版本信息
-	$(ARTISAN) --version
+version: build ## 显示版本信息
+	$(LARGO) --version
 
 # =============================================================================
 # 快速生成常用组件
 # =============================================================================
 
 .PHONY: api
-api: ## 快速生成 API 控制器和模型
+api: build ## 快速生成 API 控制器和模型
 	@read -p "请输入资源名称 (如: user): " name; \
 	echo "生成 $$name 的 API 组件..."; \
-	$(ARTISAN) make:controller $$name --namespace=api; \
-	$(ARTISAN) make:model $$name; \
-	$(ARTISAN) make:migration create_$${name}s_table --table=$${name}s; \
+	$(LARGO) make:controller $$name --namespace=api; \
+	$(LARGO) make:model $$name; \
+	$(LARGO) make:migration create_$${name}s_table --table=$${name}s; \
 	echo "✅ $$name API 组件生成完成!"
 
 .PHONY: crud
-crud: ## 快速生成完整的 CRUD 组件
+crud: build ## 快速生成完整的 CRUD 组件
 	@read -p "请输入资源名称 (如: user): " name; \
 	echo "生成 $$name 的完整 CRUD 组件..."; \
-	$(ARTISAN) make:controller $$name --namespace=app; \
-	$(ARTISAN) make:model $$name; \
-	$(ARTISAN) make:migration create_$${name}s_table --table=$${name}s; \
-	$(ARTISAN) make:test $$name --type=unit; \
-	$(ARTISAN) make:test $$name --type=integration; \
+	$(LARGO) make:controller $$name --namespace=app; \
+	$(LARGO) make:model $$name; \
+	$(LARGO) make:migration create_$${name}s_table --table=$${name}s; \
+	$(LARGO) make:test $$name --type=unit; \
+	$(LARGO) make:test $$name --type=integration; \
 	echo "✅ $$name CRUD 组件生成完成!"
 
 # =============================================================================
@@ -171,15 +172,29 @@ dev-setup: ## 设置开发环境
 	@echo "✅ 开发环境设置完成!"
 
 .PHONY: build
-build: ## 构建应用
-	@echo "构建 Laravel-Go 应用..."
-	go build -o bin/laravel-go .
-	@echo "✅ 应用构建完成: bin/laravel-go"
+build: ## 构建 largo 可执行文件
+	@echo "构建 Laravel-Go 脚手架工具..."
+	go build -o bin/largo cmd/artisan/main.go
+	@echo "✅ 构建完成: bin/largo"
+
+.PHONY: install
+install: build ## 安装 largo 到系统路径
+	@echo "安装 largo 到系统路径..."
+	@if [ -d "/usr/local/bin" ]; then \
+		sudo cp bin/largo /usr/local/bin/; \
+		echo "✅ 已安装到 /usr/local/bin/largo"; \
+	elif [ -d "$$HOME/.local/bin" ]; then \
+		cp bin/largo $$HOME/.local/bin/; \
+		echo "✅ 已安装到 $$HOME/.local/bin/largo"; \
+	else \
+		echo "❌ 无法找到合适的安装路径"; \
+		exit 1; \
+	fi
 
 .PHONY: run
 run: ## 显示脚手架工具帮助
 	@echo "Laravel-Go 脚手架工具..."
-	$(ARTISAN)
+	$(LARGO)
 
 .PHONY: test-all
 test-all: ## 运行所有测试
