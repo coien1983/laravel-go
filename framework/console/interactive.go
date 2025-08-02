@@ -81,12 +81,15 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	// 队列选择
 	config.Queue = askChoice("请选择队列系统:", []string{
 		"memory - 内存队列 (开发环境)",
-		"redis - Redis 队列 (生产环境)",
+		"redis - Redis 集群队列 (生产环境)",
 		"rabbitmq - RabbitMQ (企业级消息队列)",
 		"kafka - Apache Kafka (分布式流处理)",
 		"sqs - AWS SQS (云服务队列)",
 		"beanstalkd - Beanstalkd (轻量级队列)",
 		"database - 数据库队列 (基于数据库)",
+		"etcd - etcd 集群队列 (分布式)",
+		"consul - Consul 集群队列 (服务发现)",
+		"zookeeper - ZooKeeper 集群队列 (分布式协调)",
 	}, "memory", output)
 
 	// 前端选择

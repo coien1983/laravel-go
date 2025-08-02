@@ -1,4 +1,4 @@
-module my-kafka-test
+module my-rabbitmq-app
 
 go 1.21
 

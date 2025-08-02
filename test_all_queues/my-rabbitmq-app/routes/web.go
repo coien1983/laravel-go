@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 	"github.com/gorilla/mux"
-	"my-kafka-app/app/controllers"
+	"my-rabbitmq-app/app/controllers"
 )
 
 // RegisterWebRoutes 注册 Web 路由

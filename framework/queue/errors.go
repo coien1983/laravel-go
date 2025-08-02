@@ -17,6 +17,7 @@ var (
 	ErrWorkerStopped     = errors.New("worker is stopped")
 	ErrInvalidJob        = errors.New("invalid job")
 	ErrQueueFull         = errors.New("queue is full")
+	ErrQueueEmpty        = errors.New("queue is empty")
 )
 
 // QueueError 队列错误
