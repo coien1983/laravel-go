@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README_ZH.md)
 
-A Go language development framework based on Laravel design principles, designed to provide developers with an elegant and efficient development experience.
+A Go language development framework based on Laravel design principles, designed to provide developers with an elegant and efficient development experience. This project includes a powerful command-line scaffolding tool (similar to Laravel's Artisan) for generating Laravel-Go applications.
 
 ## Features
 
@@ -25,8 +25,11 @@ cd laravel-go
 # Install dependencies
 go mod download
 
-# Run artisan command
+# View available commands
 go run cmd/artisan/main.go
+
+# Initialize a new Laravel-Go project
+go run cmd/artisan/main.go init
 ```
 
 ### Create New Project

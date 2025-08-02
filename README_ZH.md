@@ -2,7 +2,7 @@
 
 [English](README.md) | [中文](README_ZH.md)
 
-基于 Laravel 设计思路的 Go 语言开发框架，旨在为开发者提供优雅、高效的开发体验。
+基于 Laravel 设计思路的 Go 语言开发框架，旨在为开发者提供优雅、高效的开发体验。本项目包含强大的命令行脚手架工具（类似 Laravel 的 Artisan），用于生成 Laravel-Go 应用程序。
 
 ## 特性
 
@@ -25,8 +25,11 @@ cd laravel-go
 # 安装依赖
 go mod download
 
-# 运行 artisan 命令
+# 查看可用命令
 go run cmd/artisan/main.go
+
+# 初始化新的 Laravel-Go 项目
+go run cmd/artisan/main.go init
 ```
 
 ### 创建新项目

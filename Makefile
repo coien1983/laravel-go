@@ -177,8 +177,8 @@ build: ## 构建应用
 	@echo "✅ 应用构建完成: bin/laravel-go"
 
 .PHONY: run
-run: ## 运行应用
-	@echo "启动 Laravel-Go 应用..."
+run: ## 显示脚手架工具帮助
+	@echo "Laravel-Go 脚手架工具..."
 	$(ARTISAN)
 
 .PHONY: test-all
