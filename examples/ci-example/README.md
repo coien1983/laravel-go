@@ -108,7 +108,7 @@ on:
 ```yaml
 env:
   GO_VERSION: "1.21"
-  BUILD_FLAGS: "-ldflags=\"-s -w\""
+  BUILD_FLAGS: '-ldflags="-s -w"'
 ```
 
 ## Best Practices
