@@ -158,8 +158,8 @@ jobs:
         context: .
         push: true
         tags: |
-          coien1983/laravel-go:latest
-          coien1983/laravel-go:${{ github.sha }}
+          ${{ secrets.DOCKER_USERNAME }}/laravel-go:latest
+          ${{ secrets.DOCKER_USERNAME }}/laravel-go:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
@@ -180,9 +180,17 @@ jobs:
 
     - name: Build binaries
       run: |
+        # Build main framework binary
         GOOS=linux GOARCH=amd64 go build -o laravel-go-linux-amd64 ./cmd/artisan
         GOOS=darwin GOARCH=amd64 go build -o laravel-go-darwin-amd64 ./cmd/artisan
         GOOS=windows GOARCH=amd64 go build -o laravel-go-windows-amd64.exe ./cmd/artisan
+        
+        # Build MCP service binary
+        cd tools/mcp-api-generator
+        GOOS=linux GOARCH=amd64 go build -o laravel-go-mcp-linux-amd64 .
+        GOOS=darwin GOARCH=amd64 go build -o laravel-go-mcp-darwin-amd64 .
+        GOOS=windows GOARCH=amd64 go build -o laravel-go-mcp-windows-amd64.exe .
+        cd ../..
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
@@ -191,6 +199,9 @@ jobs:
           laravel-go-linux-amd64
           laravel-go-darwin-amd64
           laravel-go-windows-amd64.exe
+          tools/mcp-api-generator/laravel-go-mcp-linux-amd64
+          tools/mcp-api-generator/laravel-go-mcp-darwin-amd64
+          tools/mcp-api-generator/laravel-go-mcp-windows-amd64.exe
         draft: false
         prerelease: false
       env:
