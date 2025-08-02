@@ -423,33 +423,531 @@ func (cmd *InitCommand) Execute(input Input) error {
 		"main.go": `package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
-	log.Println("Laravel-Go application started")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// 设置服务器
+	port := ":8080"
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		port = ":" + envPort
+	}
+
+	// 创建 HTTP 服务器
+	mux := http.NewServeMux()
+	
+	// 注册路由
+	registerRoutes(mux)
+	
+	server := &http.Server{
+		Addr:    port,
+		Handler: mux,
+	}
+
+	// 启动服务器
+	go func() {
+		fmt.Printf("🚀 Server starting on http://localhost%s\n", port)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Server error: %v", err)
+		}
+	}()
+
+	// 优雅关闭
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	
+	fmt.Println("\n🛑 Shutting down server...")
+	fmt.Println("✅ Server stopped gracefully")
+}
+
+// registerRoutes 注册路由
+func registerRoutes(mux *http.ServeMux) {
+	// 导入路由包
+	// 这里会在运行时动态加载路由
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]interface{}{
+			"message": "Welcome to Laravel-Go!",
+			"version": "1.0.0",
+			"status":  "running",
+		}
+		
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	})
+	
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]interface{}{
+			"status": "ok",
+			"time":   "2024-01-01T00:00:00Z",
+		}
+		
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+	})
 }`,
 		"go.mod": fmt.Sprintf(`module %s
 
 go 1.21
 
-require laravel-go/framework v0.1.0
+require (
+	github.com/coien1983/laravel-go/framework v0.1.0
+	github.com/gorilla/mux v1.8.1
+	github.com/joho/godotenv v1.5.1
+)
 
-replace laravel-go/framework => ./framework`, projectName),
+replace github.com/coien1983/laravel-go/framework => ./framework`, projectName),
+		".env": `# Application Configuration
+APP_NAME=Laravel-Go App
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8080
+
+# Server Configuration
+PORT=8080
+
+# Database Configuration
+DB_CONNECTION=sqlite
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=app.db
+DB_USERNAME=
+DB_PASSWORD=
+
+# Cache Configuration
+CACHE_DRIVER=memory
+
+# Session Configuration
+SESSION_DRIVER=memory
+SESSION_LIFETIME=120
+
+# Logging Configuration
+LOG_LEVEL=debug
+LOG_CHANNEL=stack`,
+		".env.example": `# Application Configuration
+APP_NAME=Laravel-Go App
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8080
+
+# Server Configuration
+PORT=8080
+
+# Database Configuration
+DB_CONNECTION=sqlite
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=app.db
+DB_USERNAME=
+DB_PASSWORD=
+
+# Cache Configuration
+CACHE_DRIVER=memory
+
+# Session Configuration
+SESSION_DRIVER=memory
+SESSION_LIFETIME=120
+
+# Logging Configuration
+LOG_LEVEL=debug
+LOG_CHANNEL=stack`,
+		"config/app.go": `package config
+
+import (
+	"os"
+	"strconv"
+)
+
+// AppConfig 应用配置
+type AppConfig struct {
+	Name   string
+	Env    string
+	Debug  bool
+	URL    string
+	Port   string
+}
+
+// LoadAppConfig 加载应用配置
+func LoadAppConfig() *AppConfig {
+	debug, _ := strconv.ParseBool(getEnv("APP_DEBUG", "true"))
+	
+	return &AppConfig{
+		Name:  getEnv("APP_NAME", "Laravel-Go App"),
+		Env:   getEnv("APP_ENV", "local"),
+		Debug: debug,
+		URL:   getEnv("APP_URL", "http://localhost:8080"),
+		Port:  getEnv("PORT", "8080"),
+	}
+}
+
+// getEnv 获取环境变量
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}`,
+		"config/database.go": `package config
+
+import (
+	"os"
+)
+
+// DatabaseConfig 数据库配置
+type DatabaseConfig struct {
+	Connection string
+	Host       string
+	Port       string
+	Database   string
+	Username   string
+	Password   string
+}
+
+// LoadDatabaseConfig 加载数据库配置
+func LoadDatabaseConfig() *DatabaseConfig {
+	return &DatabaseConfig{
+		Connection: getEnv("DB_CONNECTION", "sqlite"),
+		Host:       getEnv("DB_HOST", "127.0.0.1"),
+		Port:       getEnv("DB_PORT", "3306"),
+		Database:   getEnv("DB_DATABASE", "app.db"),
+		Username:   getEnv("DB_USERNAME", ""),
+		Password:   getEnv("DB_PASSWORD", ""),
+	}
+}
+
+// getEnv 获取环境变量
+func getEnv(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}`,
+		"app/controllers/home_controller.go": `package controllers
+
+import (
+	"net/http"
+	"encoding/json"
+)
+
+// HomeController 首页控制器
+type HomeController struct{}
+
+// NewHomeController 创建新的首页控制器
+func NewHomeController() *HomeController {
+	return &HomeController{}
+}
+
+// Index 首页
+func (c *HomeController) Index(w http.ResponseWriter, r *http.Request) {
+	response := map[string]interface{}{
+		"message": "Welcome to Laravel-Go!",
+		"version": "1.0.0",
+		"status":  "running",
+	}
+	
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+// Health 健康检查
+func (c *HomeController) Health(w http.ResponseWriter, r *http.Request) {
+	response := map[string]interface{}{
+		"status": "ok",
+		"time":   "2024-01-01T00:00:00Z",
+	}
+	
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}`,
+		"app/controllers/user_controller.go": `package controllers
+
+import (
+	"net/http"
+	"encoding/json"
+	"strconv"
+	"github.com/gorilla/mux"
+)
+
+// User 用户模型
+type User struct {
+	ID    int    ` + "`json:\"id\"`" + `
+	Name  string ` + "`json:\"name\"`" + `
+	Email string ` + "`json:\"email\"`" + `
+}
+
+// UserController 用户控制器
+type UserController struct {
+	users []User
+}
+
+// NewUserController 创建新的用户控制器
+func NewUserController() *UserController {
+	// 初始化一些示例数据
+	users := []User{
+		{ID: 1, Name: "John Doe", Email: "john@example.com"},
+		{ID: 2, Name: "Jane Smith", Email: "jane@example.com"},
+	}
+	
+	return &UserController{
+		users: users,
+	}
+}
+
+// Index 获取用户列表
+func (c *UserController) Index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(c.users)
+}
+
+// Show 获取单个用户
+func (c *UserController) Show(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+	
+	for _, user := range c.users {
+		if user.ID == id {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(user)
+			return
+		}
+	}
+	
+	http.Error(w, "User not found", http.StatusNotFound)
+}
+
+// Store 创建用户
+func (c *UserController) Store(w http.ResponseWriter, r *http.Request) {
+	var user User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	
+	// 简单的 ID 生成
+	user.ID = len(c.users) + 1
+	c.users = append(c.users, user)
+	
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(user)
+}`,
+		"app/models/user.go": `package models
+
+import (
+	"time"
+)
+
+// User 用户模型
+type User struct {
+	ID        uint      ` + "`json:\"id\"`" + `
+	Name      string    ` + "`json:\"name\"`" + `
+	Email     string    ` + "`json:\"email\"`" + `
+	Password  string    ` + "`json:\"-\"`" + `
+	CreatedAt time.Time ` + "`json:\"created_at\"`" + `
+	UpdatedAt time.Time ` + "`json:\"updated_at\"`" + `
+}
+
+// TableName 获取表名
+func (u *User) TableName() string {
+	return "users"
+}
+
+// NewUser 创建新用户
+func NewUser() *User {
+	return &User{
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+	}
+}
+
+// Fillable 可填充字段
+func (u *User) Fillable() []string {
+	return []string{"name", "email", "password"}
+}
+
+// Hidden 隐藏字段
+func (u *User) Hidden() []string {
+	return []string{"password"}
+}`,
+		"routes/web.go": `package routes
+
+import (
+	"net/http"
+	"github.com/gorilla/mux"
+	"` + projectName + `/app/controllers"
+)
+
+// RegisterWebRoutes 注册 Web 路由
+func RegisterWebRoutes(router *mux.Router) {
+	// 首页路由
+	router.HandleFunc("/", controllers.NewHomeController().Index).Methods("GET")
+	router.HandleFunc("/health", controllers.NewHomeController().Health).Methods("GET")
+	
+	// API 路由
+	api := router.PathPrefix("/api").Subrouter()
+	
+	// 用户路由
+	userController := controllers.NewUserController()
+	api.HandleFunc("/users", userController.Index).Methods("GET")
+	api.HandleFunc("/users", userController.Store).Methods("POST")
+	api.HandleFunc("/users/{id}", userController.Show).Methods("GET")
+	
+	// 静态文件
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("public"))))
+}`,
+		"database/migrations/001_create_users_table.sql": `-- Migration: Create Users Table
+-- Description: 创建用户表
+-- Version: 1.0
+
+-- UP Migration
+CREATE TABLE IF NOT EXISTS users (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name VARCHAR(255) NOT NULL,
+	email VARCHAR(255) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL,
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 插入示例数据
+INSERT INTO users (name, email, password) VALUES 
+('John Doe', 'john@example.com', 'hashed_password_1'),
+('Jane Smith', 'jane@example.com', 'hashed_password_2');
+
+-- DOWN Migration (如果需要回滚)
+-- DROP TABLE IF EXISTS users;`,
 		"README.md": fmt.Sprintf(`# %s
 
-A Laravel-Go framework application.
+一个基于 Laravel-Go Framework 构建的完整 Web 应用。
 
-## Getting Started
+## 快速开始
 
-1. Run the application:
-   `+"`"+`bash
-   go run main.go
-   `+"`"+`
+1. 安装依赖: go mod tidy
+2. 运行应用: go run main.go
+3. 访问: http://localhost:8080
 
-2. Visit http://localhost:8080`, projectName),
+## 项目结构
+
+- app/controllers/ - 控制器
+- app/models/ - 数据模型
+- config/ - 配置文件
+- database/ - 数据库相关
+- routes/ - 路由定义
+- storage/ - 存储目录
+
+## API 接口
+
+- GET / - 首页
+- GET /health - 健康检查
+- GET /api/users - 获取用户列表
+- POST /api/users - 创建用户
+
+## 开发
+
+使用 largo 命令生成代码:
+- largo make:controller ProductController
+- largo make:model Product
+- largo make:middleware AuthMiddleware
+
+更多信息请参考 Laravel-Go Framework 文档`, projectName),
+		".gitignore": `# 编译输出
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# 测试二进制文件
+*.test
+
+# 覆盖率文件
+*.out
+
+# 依赖目录
+vendor/
+
+# IDE 文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 环境变量文件
+.env
+
+# 日志文件
+storage/logs/*.log
+
+# 缓存文件
+storage/framework/cache/*
+
+# 会话文件
+storage/framework/sessions/*
+
+# 数据库文件
+*.db
+*.sqlite
+
+# 临时文件
+*.tmp
+*.temp
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 上传文件
+storage/uploads/*
+
+# 备份文件
+*.backup
+*.bak`,
+		"Makefile": `# Laravel-Go Project Makefile
+
+.PHONY: help
+help: ## 显示帮助信息
+	@echo "可用命令:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+.PHONY: run
+run: ## 运行应用
+	go run main.go
+
+.PHONY: build
+build: ## 构建应用
+	go build -o bin/app main.go
+
+.PHONY: test
+test: ## 运行测试
+	go test ./...
+
+.PHONY: clean
+clean: ## 清理构建文件
+	rm -rf bin/
+	rm -f *.db
+
+.PHONY: deps
+deps: ## 安装依赖
+	go mod tidy
+	go mod download
+
+.PHONY: dev
+dev: ## 开发模式运行
+	APP_ENV=local go run main.go
+
+.PHONY: prod
+prod: ## 生产模式运行
+	APP_ENV=production go run main.go`,
 	}
 
 	for fileName, content := range files {
