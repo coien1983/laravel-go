@@ -3,6 +3,7 @@ package console
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -341,12 +342,18 @@ func (cmd *InitCommand) GetDescription() string {
 
 // GetSignature 获取命令签名
 func (cmd *InitCommand) GetSignature() string {
-	return "init [--name=]"
+	return "init [project-name] [--name=]"
 }
 
 // GetArguments 获取命令参数
 func (cmd *InitCommand) GetArguments() []Argument {
-	return []Argument{}
+	return []Argument{
+		{
+			Name:        "project-name",
+			Description: "The name of the project (optional)",
+			Required:    false,
+		},
+	}
 }
 
 // GetOptions 获取命令选项
@@ -365,7 +372,23 @@ func (cmd *InitCommand) GetOptions() []Option {
 
 // Execute 执行命令
 func (cmd *InitCommand) Execute(input Input) error {
-	name := input.GetOption("name").(string)
+	// 获取项目名称，优先使用参数，其次使用选项
+	var projectName string
+	if arg := input.GetArgument("project-name"); arg != nil {
+		projectName = arg.(string)
+	} else {
+		projectName = input.GetOption("name").(string)
+	}
+
+	// 如果提供了项目名称，创建项目目录
+	var projectDir string
+	if projectName != "" && projectName != "laravel-go-app" {
+		projectDir = projectName
+		if err := os.MkdirAll(projectDir, 0755); err != nil {
+			return fmt.Errorf("failed to create project directory %s: %w", projectDir, err)
+		}
+		cmd.output.Success(fmt.Sprintf("Created project directory: %s", projectDir))
+	}
 
 	// 创建项目目录结构
 	dirs := []string{
@@ -380,6 +403,13 @@ func (cmd *InitCommand) Execute(input Input) error {
 		"storage/logs",
 		"tests",
 		"public",
+	}
+
+	// 如果有项目目录，在项目目录下创建结构
+	if projectDir != "" {
+		for i, dir := range dirs {
+			dirs[i] = filepath.Join(projectDir, dir)
+		}
 	}
 
 	for _, dir := range dirs {
@@ -407,7 +437,7 @@ go 1.21
 
 require laravel-go/framework v0.1.0
 
-replace laravel-go/framework => ./framework`, name),
+replace laravel-go/framework => ./framework`, projectName),
 		"README.md": fmt.Sprintf(`# %s
 
 A Laravel-Go framework application.
@@ -419,16 +449,20 @@ A Laravel-Go framework application.
    go run main.go
    `+"`"+`
 
-2. Visit http://localhost:8080`, name),
+2. Visit http://localhost:8080`, projectName),
 	}
 
 	for fileName, content := range files {
+		// 如果有项目目录，在项目目录下创建文件
+		if projectDir != "" {
+			fileName = filepath.Join(projectDir, fileName)
+		}
 		if err := os.WriteFile(fileName, []byte(content), 0644); err != nil {
 			return fmt.Errorf("failed to create file %s: %w", fileName, err)
 		}
 	}
 
-	cmd.output.Success(fmt.Sprintf("Project '%s' initialized successfully!", name))
+	cmd.output.Success(fmt.Sprintf("Project '%s' initialized successfully!", projectName))
 	return nil
 }
 
