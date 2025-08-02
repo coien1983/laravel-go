@@ -1,44 +1,46 @@
 # Laravel-Go Framework
 
-A Go language development framework based on Laravel design principles, designed to provide developers with an elegant and efficient development experience.
+[English](README.md) | [中文](README_ZH.md)
 
-## Features
+基于 Laravel 设计思路的 Go 语言开发框架，旨在为开发者提供优雅、高效的开发体验。
 
-- 🚀 **High Performance**: Leveraging Go language's high-performance characteristics
-- 🎯 **Elegant Syntax**: Drawing inspiration from Laravel's elegant design philosophy
-- 🔧 **Complete Toolchain**: Including command-line tools, ORM, template engine, and more
-- 🛡️ **Secure & Reliable**: Built-in security features and best practices
-- 📦 **Ready to Use**: Complete support for Web development, APIs, and microservices
-- 🐳 **Containerized**: Support for Docker and Kubernetes deployment
+## 特性
 
-## Quick Start
+- 🚀 **高性能**: 基于 Go 语言的高性能特性
+- 🎯 **优雅语法**: 借鉴 Laravel 的优雅设计理念
+- 🔧 **完整工具链**: 包含命令行工具、ORM、模板引擎等
+- 🛡️ **安全可靠**: 内置安全特性和最佳实践
+- 📦 **开箱即用**: 完整的 Web 开发、API 和微服务支持
+- 🐳 **容器化**: 支持 Docker 和 Kubernetes 部署
 
-### Installation
+## 快速开始
+
+### 安装
 
 ```bash
-# Clone the project
+# 克隆项目
 git clone https://github.com/your-username/laravel-go.git
 cd laravel-go
 
-# Install dependencies
+# 安装依赖
 go mod download
 
-# Run example
+# 运行示例
 go run main.go
 ```
 
-### Create New Project
+### 创建新项目
 
 ```bash
-# Use framework command-line tool to create new project
+# 使用框架命令行工具创建新项目
 laravel-go new my-project
 cd my-project
 
-# Start development server
+# 启动开发服务器
 laravel-go serve
 ```
 
-## Project Structure
+## 项目结构
 
 ```
 laravel-go-project/
@@ -89,9 +91,9 @@ laravel-go-project/
 └── main.go
 ```
 
-## Core Features
+## 核心功能
 
-### Routing System
+### 路由系统
 
 ```go
 // routes/web.go
@@ -103,7 +105,7 @@ func WebRoutes(router routing.Router) {
     router.Get("/", "HomeController@index")
     router.Get("/users", "UserController@index")
     router.Post("/users", "UserController@store")
-
+    
     router.Group("/api", func(router routing.Router) {
         router.Get("/users", "Api\\UserController@index")
         router.Post("/users", "Api\\UserController@store")
@@ -111,7 +113,7 @@ func WebRoutes(router routing.Router) {
 }
 ```
 
-### Controllers
+### 控制器
 
 ```go
 // app/Http/Controllers/UserController.go
@@ -136,12 +138,12 @@ func (c *UserController) Store(request http.Request) http.Response {
         "name":  "required|string|max:255",
         "email": "required|email|unique:users",
     }))
-
+    
     return c.Json(user, 201)
 }
 ```
 
-### Models
+### 模型
 
 ```go
 // app/Models/User.go
@@ -169,7 +171,7 @@ func (u *User) Hidden() []string {
 }
 ```
 
-### Middleware
+### 中间件
 
 ```go
 // app/Http/Middleware/AuthMiddleware.go
@@ -187,12 +189,12 @@ func (m *AuthMiddleware) Handle(request http.Request, next http.Next) http.Respo
             "error": "Unauthenticated",
         }, 401)
     }
-
+    
     return next(request)
 }
 ```
 
-### Command Line Tools
+### 命令行工具
 
 ```go
 // app/Console/Commands/MakeControllerCommand.go
@@ -216,14 +218,14 @@ func (c *MakeControllerCommand) Description() string {
 
 func (c *MakeControllerCommand) Handle(args []string) error {
     name := args[0]
-    // Generate controller code
+    // 生成控制器代码
     return nil
 }
 ```
 
-## Configuration
+## 配置
 
-### Environment Variables
+### 环境变量
 
 ```bash
 # .env
@@ -245,7 +247,7 @@ QUEUE_CONNECTION=redis
 SESSION_DRIVER=redis
 ```
 
-### Configuration Files
+### 配置文件
 
 ```go
 // config/app.go
@@ -262,7 +264,7 @@ type AppConfig struct {
 }
 ```
 
-## Deployment
+## 部署
 
 ### Docker
 
@@ -305,50 +307,50 @@ spec:
         app: laravel-go-app
     spec:
       containers:
-        - name: app
-          image: laravel-go-app:latest
-          ports:
-            - containerPort: 8080
-          env:
-            - name: APP_ENV
-              value: "production"
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
+      - name: app
+        image: laravel-go-app:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: APP_ENV
+          value: "production"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
 ```
 
-## Testing
+## 测试
 
 ```bash
-# Run all tests
+# 运行所有测试
 go test ./...
 
-# Run specific tests
+# 运行特定测试
 go test ./app/Http/Controllers
 
-# Generate test coverage report
+# 生成测试覆盖率报告
 go test -coverprofile=coverage.out ./...
 go tool cover -html=coverage.out
 ```
 
-## Contributing
+## 贡献
 
-We welcome contributions! Please read the [Contributing Guide](CONTRIBUTING.md) for details.
+欢迎贡献代码！请阅读 [贡献指南](CONTRIBUTING.md) 了解详情。
 
-## License
+## 许可证
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
 
-## Support
+## 支持
 
-- 📖 [Documentation](https://laravel-go.dev)
-- 💬 [Discussions](https://github.com/your-username/laravel-go/discussions)
-- 🐛 [Issue Tracker](https://github.com/your-username/laravel-go/issues)
-- 📧 [Email Support](mailto:support@laravel-go.dev)
+- 📖 [文档](https://laravel-go.dev)
+- 💬 [讨论区](https://github.com/your-username/laravel-go/discussions)
+- 🐛 [问题反馈](https://github.com/your-username/laravel-go/issues)
+- 📧 [邮件支持](mailto:support@laravel-go.dev)
 
-## Acknowledgments
+## 致谢
 
-Thanks to the Laravel framework for inspiration, and to all developers who have contributed to the Go ecosystem.
+感谢 Laravel 框架的启发，以及所有为 Go 生态系统做出贡献的开发者。 
