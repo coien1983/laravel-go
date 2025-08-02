@@ -134,7 +134,11 @@ list: build ## 列出所有可用命令
 
 .PHONY: version
 version: build ## 显示版本信息
-	$(LARGO) --version
+	$(LARGO) version
+
+.PHONY: info
+info: build ## 显示项目信息
+	$(LARGO) project:info
 
 # =============================================================================
 # 快速生成常用组件
@@ -143,22 +147,24 @@ version: build ## 显示版本信息
 .PHONY: api
 api: build ## 快速生成 API 控制器和模型
 	@read -p "请输入资源名称 (如: user): " name; \
-	echo "生成 $$name 的 API 组件..."; \
-	$(LARGO) make:controller $$name --namespace=api; \
-	$(LARGO) make:model $$name; \
-	$(LARGO) make:migration create_$${name}s_table --table=$${name}s; \
-	echo "✅ $$name API 组件生成完成!"
+	read -p "请输入字段 (格式: name:string,email:string,age:int): " fields; \
+	$(LARGO) make:api $$name --fields=$$fields
 
 .PHONY: crud
 crud: build ## 快速生成完整的 CRUD 组件
 	@read -p "请输入资源名称 (如: user): " name; \
-	echo "生成 $$name 的完整 CRUD 组件..."; \
-	$(LARGO) make:controller $$name --namespace=app; \
-	$(LARGO) make:model $$name; \
-	$(LARGO) make:migration create_$${name}s_table --table=$${name}s; \
-	$(LARGO) make:test $$name --type=unit; \
-	$(LARGO) make:test $$name --type=integration; \
-	echo "✅ $$name CRUD 组件生成完成!"
+	read -p "请输入字段 (格式: name:string,email:string,age:int): " fields; \
+	$(LARGO) make:crud $$name --fields=$$fields
+
+.PHONY: api-simple
+api-simple: build ## 快速生成 API 组件 (简单模式)
+	@read -p "请输入资源名称 (如: user): " name; \
+	$(LARGO) make:api $$name
+
+.PHONY: crud-simple
+crud-simple: build ## 快速生成 CRUD 组件 (简单模式)
+	@read -p "请输入资源名称 (如: user): " name; \
+	$(LARGO) make:crud $$name
 
 # =============================================================================
 # 开发工具

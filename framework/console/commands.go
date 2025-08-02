@@ -1234,3 +1234,283 @@ func (cmd *MakeK8sCommand) Execute(input Input) error {
 
 	return cmd.generator.GenerateK8sConfig(name, replicas, port, namespace)
 }
+
+// MakeApiCommand 快速生成 API 组件命令
+type MakeApiCommand struct {
+	generator *Generator
+}
+
+// NewMakeApiCommand 创建新的快速生成 API 组件命令
+func NewMakeApiCommand(generator *Generator) *MakeApiCommand {
+	return &MakeApiCommand{
+		generator: generator,
+	}
+}
+
+// GetName 获取命令名称
+func (cmd *MakeApiCommand) GetName() string {
+	return "make:api"
+}
+
+// GetDescription 获取命令描述
+func (cmd *MakeApiCommand) GetDescription() string {
+	return "Quickly generate API controller and model"
+}
+
+// GetSignature 获取命令签名
+func (cmd *MakeApiCommand) GetSignature() string {
+	return "make:api <name> [--fields=]"
+}
+
+// GetArguments 获取命令参数
+func (cmd *MakeApiCommand) GetArguments() []Argument {
+	return []Argument{
+		{
+			Name:        "name",
+			Description: "The name of the resource",
+			Required:    true,
+		},
+	}
+}
+
+// GetOptions 获取命令选项
+func (cmd *MakeApiCommand) GetOptions() []Option {
+	return []Option{
+		{
+			Name:        "fields",
+			ShortName:   "f",
+			Description: "The fields for the model (format: name:string,email:string,age:int)",
+			Required:    false,
+			Default:     "",
+			Type:        "string",
+		},
+	}
+}
+
+// Execute 执行命令
+func (cmd *MakeApiCommand) Execute(input Input) error {
+	name := input.GetArgument("name").(string)
+	fields := input.GetOption("fields").(string)
+
+	cmd.generator.output.Info(fmt.Sprintf("生成 %s 的 API 组件...", name))
+
+	// 生成控制器
+	if err := cmd.generator.GenerateController(name, "api"); err != nil {
+		return err
+	}
+
+	// 生成模型
+	fieldList := []string{}
+	if fields != "" {
+		fieldList = strings.Split(fields, ",")
+	}
+	if err := cmd.generator.GenerateModel(name, fieldList); err != nil {
+		return err
+	}
+
+	// 生成迁移
+	migrationName := fmt.Sprintf("create_%ss_table", name)
+	tableName := fmt.Sprintf("%ss", name)
+	if err := cmd.generator.GenerateMigration(migrationName, tableName, fieldList); err != nil {
+		return err
+	}
+
+	cmd.generator.output.Success(fmt.Sprintf("✅ %s API 组件生成完成!", name))
+	return nil
+}
+
+// MakeCrudCommand 快速生成 CRUD 组件命令
+type MakeCrudCommand struct {
+	generator *Generator
+}
+
+// NewMakeCrudCommand 创建新的快速生成 CRUD 组件命令
+func NewMakeCrudCommand(generator *Generator) *MakeCrudCommand {
+	return &MakeCrudCommand{
+		generator: generator,
+	}
+}
+
+// GetName 获取命令名称
+func (cmd *MakeCrudCommand) GetName() string {
+	return "make:crud"
+}
+
+// GetDescription 获取命令描述
+func (cmd *MakeCrudCommand) GetDescription() string {
+	return "Quickly generate complete CRUD components"
+}
+
+// GetSignature 获取命令签名
+func (cmd *MakeCrudCommand) GetSignature() string {
+	return "make:crud <name> [--fields=]"
+}
+
+// GetArguments 获取命令参数
+func (cmd *MakeCrudCommand) GetArguments() []Argument {
+	return []Argument{
+		{
+			Name:        "name",
+			Description: "The name of the resource",
+			Required:    true,
+		},
+	}
+}
+
+// GetOptions 获取命令选项
+func (cmd *MakeCrudCommand) GetOptions() []Option {
+	return []Option{
+		{
+			Name:        "fields",
+			ShortName:   "f",
+			Description: "The fields for the model (format: name:string,email:string,age:int)",
+			Required:    false,
+			Default:     "",
+			Type:        "string",
+		},
+	}
+}
+
+// Execute 执行命令
+func (cmd *MakeCrudCommand) Execute(input Input) error {
+	name := input.GetArgument("name").(string)
+	fields := input.GetOption("fields").(string)
+
+	cmd.generator.output.Info(fmt.Sprintf("生成 %s 的完整 CRUD 组件...", name))
+
+	// 生成控制器
+	if err := cmd.generator.GenerateController(name, "app"); err != nil {
+		return err
+	}
+
+	// 生成模型
+	fieldList := []string{}
+	if fields != "" {
+		fieldList = strings.Split(fields, ",")
+	}
+	if err := cmd.generator.GenerateModel(name, fieldList); err != nil {
+		return err
+	}
+
+	// 生成迁移
+	migrationName := fmt.Sprintf("create_%ss_table", name)
+	tableName := fmt.Sprintf("%ss", name)
+	if err := cmd.generator.GenerateMigration(migrationName, tableName, fieldList); err != nil {
+		return err
+	}
+
+	// 生成单元测试
+	if err := cmd.generator.GenerateTest(name, "unit"); err != nil {
+		return err
+	}
+
+	// 生成集成测试
+	if err := cmd.generator.GenerateTest(name, "integration"); err != nil {
+		return err
+	}
+
+	cmd.generator.output.Success(fmt.Sprintf("✅ %s CRUD 组件生成完成!", name))
+	return nil
+}
+
+// ProjectInfoCommand 项目信息命令
+type ProjectInfoCommand struct {
+	output Output
+}
+
+// NewProjectInfoCommand 创建新的项目信息命令
+func NewProjectInfoCommand(output Output) *ProjectInfoCommand {
+	return &ProjectInfoCommand{
+		output: output,
+	}
+}
+
+// GetName 获取命令名称
+func (cmd *ProjectInfoCommand) GetName() string {
+	return "project:info"
+}
+
+// GetDescription 获取命令描述
+func (cmd *ProjectInfoCommand) GetDescription() string {
+	return "Show project information"
+}
+
+// GetSignature 获取命令签名
+func (cmd *ProjectInfoCommand) GetSignature() string {
+	return "project:info"
+}
+
+// GetArguments 获取命令参数
+func (cmd *ProjectInfoCommand) GetArguments() []Argument {
+	return []Argument{}
+}
+
+// GetOptions 获取命令选项
+func (cmd *ProjectInfoCommand) GetOptions() []Option {
+	return []Option{}
+}
+
+// Execute 执行命令
+func (cmd *ProjectInfoCommand) Execute(input Input) error {
+	cmd.output.Info("Laravel-Go Framework 项目信息:")
+	cmd.output.Info("  应用名称: laravel-go-app")
+	cmd.output.Info("  默认端口: 8080")
+	cmd.output.Info("  默认命名空间: default")
+	cmd.output.Info("  默认副本数: 3")
+	cmd.output.Info("")
+	cmd.output.Info("可用命令:")
+	cmd.output.Info("  largo list          - 显示所有命令")
+	cmd.output.Info("  largo init          - 初始化项目")
+	cmd.output.Info("  largo make:controller - 生成控制器")
+	cmd.output.Info("  largo make:model    - 生成模型")
+	cmd.output.Info("  largo make:docker   - 生成 Docker 配置")
+	cmd.output.Info("  largo make:k8s      - 生成 Kubernetes 配置")
+	cmd.output.Info("  largo make:api      - 快速生成 API 组件")
+	cmd.output.Info("  largo make:crud     - 快速生成 CRUD 组件")
+	return nil
+}
+
+// VersionCommand 版本信息命令
+type VersionCommand struct {
+	output Output
+}
+
+// NewVersionCommand 创建新的版本信息命令
+func NewVersionCommand(output Output) *VersionCommand {
+	return &VersionCommand{
+		output: output,
+	}
+}
+
+// GetName 获取命令名称
+func (cmd *VersionCommand) GetName() string {
+	return "version"
+}
+
+// GetDescription 获取命令描述
+func (cmd *VersionCommand) GetDescription() string {
+	return "Show version information"
+}
+
+// GetSignature 获取命令签名
+func (cmd *VersionCommand) GetSignature() string {
+	return "version"
+}
+
+// GetArguments 获取命令参数
+func (cmd *VersionCommand) GetArguments() []Argument {
+	return []Argument{}
+}
+
+// GetOptions 获取命令选项
+func (cmd *VersionCommand) GetOptions() []Option {
+	return []Option{}
+}
+
+// Execute 执行命令
+func (cmd *VersionCommand) Execute(input Input) error {
+	cmd.output.Info("Laravel-Go Framework v1.0.0")
+	cmd.output.Info("A modern Go web framework inspired by Laravel")
+	cmd.output.Info("GitHub: https://github.com/coien1983/laravel-go")
+	return nil
+}
