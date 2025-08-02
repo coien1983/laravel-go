@@ -61,7 +61,7 @@ func (g *Generator) loadTemplates() {
 
 import (
 	"net/http"
-	"laravel-go/framework/http"
+	"github.com/coien1983/laravel-go/framework/http"
 )
 
 type {{.Name}}Controller struct {
@@ -99,7 +99,7 @@ func (c *{{.Name}}Controller) Destroy(w http.ResponseWriter, r *http.Request) {
 
 import (
 	"time"
-	"laravel-go/framework/database"
+	"github.com/coien1983/laravel-go/framework/database"
 )
 
 type {{.Name}} struct {
@@ -133,7 +133,7 @@ func (m *{{.Name}}) Hidden() []string {
 
 import (
 	"net/http"
-	"laravel-go/framework/http"
+	"github.com/coien1983/laravel-go/framework/http"
 )
 
 type {{.Name}}Middleware struct {
@@ -159,7 +159,7 @@ func (m *{{.Name}}Middleware) Terminate(w http.ResponseWriter, r *http.Request) 
 	migrationTmpl := `package migrations
 
 import (
-	"laravel-go/framework/database"
+	"github.com/coien1983/laravel-go/framework/database"
 )
 
 type {{.Name}}Migration struct {
@@ -187,7 +187,7 @@ import (
 	"testing"
 	"net/http"
 	"net/http/httptest"
-	"laravel-go/framework/testing"
+	"github.com/coien1983/laravel-go/framework/testing"
 )
 
 func Test{{.Name}}(t *testing.T) {

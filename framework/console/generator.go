@@ -38,7 +38,7 @@ func (g *Generator) GenerateController(name, namespace string) error {
 	controllerTemplate := `package controllers
 
 import (
-	"laravel-go/framework/http"
+	"github.com/coien1983/laravel-go/framework/http"
 )
 
 // {{ .ControllerName }} 控制器
@@ -134,7 +134,7 @@ func (g *Generator) GenerateModel(name string, fields []string) error {
 	modelTemplate := `package models
 
 import (
-	"laravel-go/framework/database"
+	"github.com/coien1983/laravel-go/framework/database"
 )
 
 // {{ .ModelName }} 模型
@@ -218,7 +218,7 @@ func (g *Generator) GenerateMiddleware(name string) error {
 	middlewareTemplate := `package middleware
 
 import (
-	"laravel-go/framework/http"
+	"github.com/coien1983/laravel-go/framework/http"
 )
 
 // {{ .MiddlewareName }} 中间件
