@@ -40,6 +40,7 @@ type ProjectConfig struct {
 	Compression          string // "none" | "gzip" | "brotli"
 	WebSockets           string // "none" | "basic" | "full"
 	TaskScheduling       string // "none" | "basic" | "full"
+	Timer                string // "none" | "cron" | "interval" | "full"
 	HealthChecks         string // "none" | "basic" | "full"
 	Metrics              string // "none" | "basic" | "prometheus"
 	Profiling            string // "none" | "pprof" | "full"
@@ -260,6 +261,14 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 		"full - 完整调度 (复杂表达式)",
 	}, "none", output)
 
+	// 定时器
+	config.Timer = askChoice("请选择定时器功能:", []string{
+		"none - 无定时器",
+		"cron - Cron 表达式定时器 (Unix 风格)",
+		"interval - 间隔定时器 (简单间隔)",
+		"full - 完整定时器 (Cron + 间隔 + 自定义)",
+	}, "cron", output)
+
 	// 健康检查
 	config.HealthChecks = askChoice("请选择健康检查:", []string{
 		"none - 无健康检查",
@@ -332,6 +341,7 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	output.Info(fmt.Sprintf("   压缩功能: %s", config.Compression))
 	output.Info(fmt.Sprintf("   WebSocket: %s", config.WebSockets))
 	output.Info(fmt.Sprintf("   任务调度: %s", config.TaskScheduling))
+	output.Info(fmt.Sprintf("   定时器: %s", config.Timer))
 	output.Info(fmt.Sprintf("   健康检查: %s", config.HealthChecks))
 	output.Info(fmt.Sprintf("   指标监控: %s", config.Metrics))
 	output.Info(fmt.Sprintf("   性能分析: %s", config.Profiling))
