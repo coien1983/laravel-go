@@ -380,6 +380,12 @@ func (cmd *InitCommand) Execute(input Input) error {
 		projectName = input.GetOption("name").(string)
 	}
 
+	// 交互式配置
+	config := InteractiveConfig(projectName, cmd.output)
+	
+	// 显示配置信息
+	cmd.output.Info(fmt.Sprintf("正在使用配置创建项目: %s", config.Name))
+
 	// 如果提供了项目名称，创建项目目录
 	var projectDir string
 	if projectName != "" && projectName != "laravel-go-app" {
