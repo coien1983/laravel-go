@@ -189,9 +189,6 @@ app/Http/Controllers/*_test.go
 app/Models/*_test.go
 app/Services/*_test.go
 
-# Framework cache
-framework/cache/
-framework/logs/
 
 # Test coverage
 coverage/
@@ -208,4 +205,5 @@ coverage/
 
 # Local development files
 local/
-dev/ 
+dev/
+.vibedev/
