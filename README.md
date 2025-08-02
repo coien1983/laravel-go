@@ -348,7 +348,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - 📖 [Documentation](https://laravel-go.dev)
 - 🐛 [Issue Tracker](https://github.com/coien1983/laravel-go/issues)
-- 📧 [Email Support](mailto:support@laravel-go.dev)
+- 📧 [Email Support](mailto:coien1983@126.com)
 
 ## Acknowledgments
 

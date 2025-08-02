@@ -98,7 +98,7 @@ For documentation support:
 - Review logs for error messages
 - Test with provided examples
 - Create an issue on GitHub
-- Contact the maintainers
+- Contact the maintainers at coien1983@126.com
 
 ## Version Information
 

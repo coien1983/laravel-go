@@ -348,7 +348,7 @@ go tool cover -html=coverage.out
 
 - 📖 [文档](https://laravel-go.dev)
 - 🐛 [问题反馈](https://github.com/coien1983/laravel-go/issues)
-- 📧 [邮件支持](mailto:support@laravel-go.dev)
+- 📧 [邮件支持](mailto:coien1983@126.com)
 
 ## 致谢
 
