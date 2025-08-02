@@ -12,7 +12,7 @@ type ProjectConfig struct {
 	Name          string
 	Architecture  string // "monolithic" | "microservice"
 	Database      string // "sqlite" | "mysql" | "postgresql"
-	Cache         string // "memory" | "redis"
+	Cache         string // "memory" | "redis" | "memcached"
 	Queue         string // "memory" | "redis" | "rabbitmq"
 	Frontend      string // "api" | "blade" | "vue" | "react"
 	Auth          string // "jwt" | "session" | "none"
@@ -21,30 +21,30 @@ type ProjectConfig struct {
 	Documentation string // "swagger" | "none"
 	Monitoring    string // "prometheus" | "none"
 	Logging       string // "file" | "json" | "both"
-	
+
 	// 框架核心功能
-	Console       string // "basic" | "full" | "custom"
-	Events        string // "none" | "basic" | "full"
-	Validation    string // "none" | "basic" | "full"
-	Middleware    string // "none" | "basic" | "full"
-	Routing       string // "basic" | "advanced" | "full"
-	Session       string // "none" | "file" | "redis" | "database"
-	Mail          string // "none" | "smtp" | "mailgun" | "sendgrid"
-	Notifications string // "none" | "database" | "mail" | "slack"
-	FileStorage   string // "local" | "s3" | "oss" | "cos"
-	Encryption    string // "none" | "basic" | "full"
-	Hashing       string // "none" | "bcrypt" | "argon2"
-	Pagination    string // "none" | "basic" | "advanced"
-	RateLimiting  string // "none" | "basic" | "advanced"
-	CORS          string // "none" | "basic" | "full"
-	Compression   string // "none" | "gzip" | "brotli"
-	WebSockets    string // "none" | "basic" | "full"
-	TaskScheduling string // "none" | "basic" | "full"
-	HealthChecks  string // "none" | "basic" | "full"
-	Metrics       string // "none" | "basic" | "prometheus"
-	Profiling     string // "none" | "pprof" | "full"
+	Console              string // "basic" | "full" | "custom"
+	Events               string // "none" | "basic" | "full"
+	Validation           string // "none" | "basic" | "full"
+	Middleware           string // "none" | "basic" | "full"
+	Routing              string // "basic" | "advanced" | "full"
+	Session              string // "none" | "file" | "redis" | "database"
+	Mail                 string // "none" | "smtp" | "mailgun" | "sendgrid"
+	Notifications        string // "none" | "database" | "mail" | "slack"
+	FileStorage          string // "local" | "s3" | "oss" | "cos"
+	Encryption           string // "none" | "basic" | "full"
+	Hashing              string // "none" | "bcrypt" | "argon2"
+	Pagination           string // "none" | "basic" | "advanced"
+	RateLimiting         string // "none" | "basic" | "advanced"
+	CORS                 string // "none" | "basic" | "full"
+	Compression          string // "none" | "gzip" | "brotli"
+	WebSockets           string // "none" | "basic" | "full"
+	TaskScheduling       string // "none" | "basic" | "full"
+	HealthChecks         string // "none" | "basic" | "full"
+	Metrics              string // "none" | "basic" | "prometheus"
+	Profiling            string // "none" | "pprof" | "full"
 	Internationalization string // "none" | "basic" | "full"
-	Localization  string // "none" | "basic" | "full"
+	Localization         string // "none" | "basic" | "full"
 }
 
 // InteractiveConfig 交互式配置
@@ -74,6 +74,7 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	config.Cache = askChoice("请选择缓存系统:", []string{
 		"memory - 内存缓存 (开发环境)",
 		"redis - Redis (生产环境推荐)",
+		"memcached - Memcached (高性能缓存)",
 	}, "memory", output)
 
 	// 队列选择
