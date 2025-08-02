@@ -25,8 +25,8 @@ cd laravel-go
 # Install dependencies
 go mod download
 
-# Run example
-go run main.go
+# Run artisan command
+go run cmd/artisan/main.go
 ```
 
 ### Create New Project

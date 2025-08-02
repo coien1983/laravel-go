@@ -25,8 +25,8 @@ cd laravel-go
 # 安装依赖
 go mod download
 
-# 运行示例
-go run main.go
+# 运行 artisan 命令
+go run cmd/artisan/main.go
 ```
 
 ### 创建新项目

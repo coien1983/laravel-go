@@ -179,7 +179,7 @@ build: ## 构建应用
 .PHONY: run
 run: ## 运行应用
 	@echo "启动 Laravel-Go 应用..."
-	go run main.go
+	$(ARTISAN)
 
 .PHONY: test-all
 test-all: ## 运行所有测试
