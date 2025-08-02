@@ -46,17 +46,20 @@ This project and everyone participating in it is governed by our [Code of Conduc
 ## Development Setup
 
 1. **Fork and clone the repository**
+
    ```bash
    git clone https://github.com/your-username/laravel-go.git
    cd laravel-go
    ```
 
 2. **Install dependencies**
+
    ```bash
    go mod download
    ```
 
 3. **Run tests**
+
    ```bash
    go test ./...
    ```
@@ -124,4 +127,4 @@ If you need help with contributing, you can:
 - Join our community discussions
 - Check the documentation
 
-Thank you for contributing to Laravel-Go Framework! 
+Thank you for contributing to Laravel-Go Framework!
