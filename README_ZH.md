@@ -22,21 +22,25 @@
 git clone git@github.com:coien1983/laravel-go.git
 cd laravel-go
 
-# 安装依赖
+# 快速安装（推荐）
+./install.sh
+
+# 或手动安装
 go mod download
+make install
 
-# 构建 largo 命令
-make build
-
-# 查看可用命令
-./bin/largo
+# 现在可以在任何地方使用 largo
+largo --version
+largo list
 
 # 初始化新的 Laravel-Go 项目
-./bin/largo init
-
-# 或者全局安装（可选）
-make install
 largo init
+
+# 创建控制器
+largo make:controller UserController
+
+# 创建模型
+largo make:model User
 ```
 
 ### 创建新项目

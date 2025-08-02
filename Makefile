@@ -178,16 +178,15 @@ build: ## 构建 largo 可执行文件
 	@echo "✅ 构建完成: bin/largo"
 
 .PHONY: install
-install: build ## 安装 largo 到系统路径
-	@echo "安装 largo 到系统路径..."
-	@if [ -d "/usr/local/bin" ]; then \
-		sudo cp bin/largo /usr/local/bin/; \
-		echo "✅ 已安装到 /usr/local/bin/largo"; \
-	elif [ -d "$$HOME/.local/bin" ]; then \
-		cp bin/largo $$HOME/.local/bin/; \
-		echo "✅ 已安装到 $$HOME/.local/bin/largo"; \
+install: build ## 安装 largo 到 Go bin 目录
+	@echo "安装 largo 到 Go bin 目录..."
+	@GOBIN=$$(go env GOPATH)/bin; \
+	if [ -d "$$GOBIN" ]; then \
+		cp bin/largo $$GOBIN/; \
+		echo "✅ 已安装到 $$GOBIN/largo"; \
+		echo "现在可以在任何地方使用 'largo' 命令"; \
 	else \
-		echo "❌ 无法找到合适的安装路径"; \
+		echo "❌ 无法找到 Go bin 目录"; \
 		exit 1; \
 	fi
 

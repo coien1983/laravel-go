@@ -22,21 +22,25 @@ A Go language development framework based on Laravel design principles, designed
 git clone git@github.com:coien1983/laravel-go.git
 cd laravel-go
 
-# Install dependencies
+# Quick install (recommended)
+./install.sh
+
+# Or manual install
 go mod download
+make install
 
-# Build the largo command
-make build
-
-# View available commands
-./bin/largo
+# Now you can use largo anywhere
+largo --version
+largo list
 
 # Initialize a new Laravel-Go project
-./bin/largo init
-
-# Or install globally (optional)
-make install
 largo init
+
+# Create a controller
+largo make:controller UserController
+
+# Create a model
+largo make:model User
 ```
 
 ### Create New Project
