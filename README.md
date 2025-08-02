@@ -19,7 +19,7 @@ A Go language development framework based on Laravel design principles, designed
 
 ```bash
 # Clone the project
-git clone https://github.com/coien1983/laravel-go.git
+git clone git@github.com:coien1983/laravel-go.git
 cd laravel-go
 
 # Install dependencies

@@ -48,7 +48,7 @@ This project and everyone participating in it is governed by our [Code of Conduc
 1. **Fork and clone the repository**
 
    ```bash
-   git clone https://github.com/coien1983/laravel-go.git
+   git clone git@github.com:coien1983/laravel-go.git
    cd laravel-go
    ```
 

@@ -19,7 +19,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/coien1983/laravel-go.git
+git clone git@github.com:coien1983/laravel-go.git
 cd laravel-go
 
 # 安装依赖
