@@ -1,4 +1,4 @@
-module my-vue-app
+module my-full-app
 
 go 1.21
 

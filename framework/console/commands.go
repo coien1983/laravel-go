@@ -382,7 +382,7 @@ func (cmd *InitCommand) Execute(input Input) error {
 
 	// 交互式配置
 	config := InteractiveConfig(projectName, cmd.output)
-	
+
 	// 显示配置信息
 	cmd.output.Info(fmt.Sprintf("正在使用配置创建项目: %s", config.Name))
 

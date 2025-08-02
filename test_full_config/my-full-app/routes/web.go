@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 	"github.com/gorilla/mux"
-	"test-app/app/controllers"
+	"my-full-app/app/controllers"
 )
 
 // RegisterWebRoutes 注册 Web 路由
