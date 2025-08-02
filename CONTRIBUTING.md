@@ -124,7 +124,7 @@ If you have a suggestion for a new feature or enhancement, please include as muc
 If you need help with contributing, you can:
 
 - Open an issue for questions
-- Join our community discussions
 - Check the documentation
+- Review existing issues and pull requests
 
 Thank you for contributing to Laravel-Go Framework!

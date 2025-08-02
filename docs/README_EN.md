@@ -92,10 +92,13 @@ We welcome contributions to improve the documentation. Please:
 
 ## Support
 
-- 📖 [Documentation](https://laravel-go.dev/docs)
-- 💬 [Discussions](https://github.com/coien1983/laravel-go/discussions)
-- 🐛 [Issue Tracker](https://github.com/coien1983/laravel-go/issues)
-- 📧 [Email Support](mailto:support@laravel-go.dev)
+For documentation support:
+
+- Check the troubleshooting section
+- Review logs for error messages
+- Test with provided examples
+- Create an issue on GitHub
+- Contact the maintainers
 
 ## Version Information
 
