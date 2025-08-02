@@ -1,0 +1,207 @@
+{
+  "Laravel-Go Controller": {
+    "prefix": "lg-controller",
+    "body": [
+      "package controllers",
+      "",
+      "import (",
+      "\t\"net/http\"",
+      "\t\"laravel-go/framework/http\"",
+      ")",
+      "",
+      "type ${1:Name}Controller struct {",
+      "\thttp.Controller",
+      "}",
+      "",
+      "func New${1:Name}Controller() *${1:Name}Controller {",
+      "\treturn &${1:Name}Controller{}",
+      "}",
+      "",
+      "func (c *${1:Name}Controller) Index(w http.ResponseWriter, r *http.Request) {",
+      "\t$0",
+      "}",
+      "",
+      "func (c *${1:Name}Controller) Show(w http.ResponseWriter, r *http.Request) {",
+      "\t",
+      "}",
+      "",
+      "func (c *${1:Name}Controller) Store(w http.ResponseWriter, r *http.Request) {",
+      "\t",
+      "}",
+      "",
+      "func (c *${1:Name}Controller) Update(w http.ResponseWriter, r *http.Request) {",
+      "\t",
+      "}",
+      "",
+      "func (c *${1:Name}Controller) Destroy(w http.ResponseWriter, r *http.Request) {",
+      "\t",
+      "}"
+    ],
+    "description": "Create a new Laravel-Go controller"
+  },
+  "Laravel-Go Model": {
+    "prefix": "lg-model",
+    "body": [
+      "package models",
+      "",
+      "import (",
+      "\t\"time\"",
+      "\t\"laravel-go/framework/database\"",
+      ")",
+      "",
+      "type ${1:Name} struct {",
+      "\tdatabase.Model",
+      "\tID        uint      `json:\"id\"`",
+      "\tCreatedAt time.Time `json:\"created_at\"`",
+      "\tUpdatedAt time.Time `json:\"updated_at\"`",
+      "\t$0",
+      "}",
+      "",
+      "func (m *${1:Name}) TableName() string {",
+      "\treturn \"${2:table_name}\"",
+      "}",
+      "",
+      "func (m *${1:Name}) Fillable() []string {",
+      "\treturn []string{",
+      "\t\t$3",
+      "\t}",
+      "}",
+      "",
+      "func (m *${1:Name}) Hidden() []string {",
+      "\treturn []string{",
+      "\t\t\"password\",",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a new Laravel-Go model"
+  },
+  "Laravel-Go Middleware": {
+    "prefix": "lg-middleware",
+    "body": [
+      "package middleware",
+      "",
+      "import (",
+      "\t\"net/http\"",
+      "\t\"laravel-go/framework/http\"",
+      ")",
+      "",
+      "type ${1:Name}Middleware struct {",
+      "\thttp.Middleware",
+      "}",
+      "",
+      "func New${1:Name}Middleware() *${1:Name}Middleware {",
+      "\treturn &${1:Name}Middleware{}",
+      "}",
+      "",
+      "func (m *${1:Name}Middleware) Handle(w http.ResponseWriter, r *http.Request) bool {",
+      "\t$0",
+      "\treturn true",
+      "}",
+      "",
+      "func (m *${1:Name}Middleware) Terminate(w http.ResponseWriter, r *http.Request) {",
+      "\t",
+      "}"
+    ],
+    "description": "Create a new Laravel-Go middleware"
+  },
+  "Laravel-Go Route": {
+    "prefix": "lg-route",
+    "body": [
+      "Route.Get(\"/${1:path}\", ${2:controller}.${3:method})",
+      "$0"
+    ],
+    "description": "Create a new Laravel-Go route"
+  },
+  "Laravel-Go Route Group": {
+    "prefix": "lg-route-group",
+    "body": [
+      "Route.Group(\"/${1:prefix}\", func() {",
+      "\tRoute.Get(\"/${2:path}\", ${3:controller}.${4:method})",
+      "\t$0",
+      "})"
+    ],
+    "description": "Create a new Laravel-Go route group"
+  },
+  "Laravel-Go Database Query": {
+    "prefix": "lg-db-query",
+    "body": [
+      "result, err := DB.Table(\"${1:table}\").",
+      "\tSelect(\"${2:*}\").",
+      "\tWhere(\"${3:column}\", ${4:value}).",
+      "\tOrderBy(\"${5:created_at}\", \"${6:desc}\").",
+      "\tLimit(${7:10}).",
+      "\tGet()",
+      "$0"
+    ],
+    "description": "Create a new Laravel-Go database query"
+  },
+  "Laravel-Go Container Bind": {
+    "prefix": "lg-bind",
+    "body": [
+      "app.Bind(\"${1:interface}\", ${2:concrete})",
+      "$0"
+    ],
+    "description": "Bind an interface to a concrete implementation"
+  },
+  "Laravel-Go Container Make": {
+    "prefix": "lg-make",
+    "body": [
+      "${1:instance} := app.Make(\"${2:interface}\").(${3:type})",
+      "$0"
+    ],
+    "description": "Resolve a dependency from the container"
+  },
+  "Laravel-Go Config Get": {
+    "prefix": "lg-config",
+    "body": [
+      "value := config.Get(\"${1:app.name}\")",
+      "$0"
+    ],
+    "description": "Get a configuration value"
+  },
+  "Laravel-Go Test": {
+    "prefix": "lg-test",
+    "body": [
+      "package ${1:package}",
+      "",
+      "import (",
+      "\t\"testing\"",
+      "\t\"net/http\"",
+      "\t\"net/http/httptest\"",
+      "\t\"laravel-go/framework/testing\"",
+      ")",
+      "",
+      "func Test${2:Name}(t *testing.T) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a new Laravel-Go test"
+  },
+  "Laravel-Go Migration": {
+    "prefix": "lg-migration",
+    "body": [
+      "package migrations",
+      "",
+      "import (",
+      "\t\"laravel-go/framework/database\"",
+      ")",
+      "",
+      "type ${1:Name}Migration struct {",
+      "\tdatabase.Migration",
+      "}",
+      "",
+      "func (m *${1:Name}Migration) Up() error {",
+      "\treturn DB.Schema.Create(\"${2:table_name}\", func(table *database.Blueprint) {",
+      "\t\ttable.ID()",
+      "\t\ttable.String(\"${3:name}\")",
+      "\t\ttable.Timestamps()",
+      "\t})",
+      "}",
+      "",
+      "func (m *${1:Name}Migration) Down() error {",
+      "\treturn DB.Schema.Drop(\"${2:table_name}\")",
+      "}"
+    ],
+    "description": "Create a new Laravel-Go migration"
+  }
+} 

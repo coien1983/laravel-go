@@ -1,0 +1,163 @@
+{
+  "name": "laravel-go-framework",
+  "displayName": "Laravel-Go Framework",
+  "description": "IDE support for Laravel-Go Framework development",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:go",
+    "onCommand:laravel-go.generate.controller",
+    "onCommand:laravel-go.generate.model",
+    "onCommand:laravel-go.generate.middleware",
+    "onCommand:laravel-go.generate.migration",
+    "onCommand:laravel-go.generate.test",
+    "onCommand:laravel-go.run.migrate",
+    "onCommand:laravel-go.run.seed",
+    "onCommand:laravel-go.run.test",
+    "onCommand:laravel-go.run.serve"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "laravel-go.generate.controller",
+        "title": "Laravel-Go: Generate Controller",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.generate.model",
+        "title": "Laravel-Go: Generate Model",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.generate.middleware",
+        "title": "Laravel-Go: Generate Middleware",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.generate.migration",
+        "title": "Laravel-Go: Generate Migration",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.generate.test",
+        "title": "Laravel-Go: Generate Test",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.run.migrate",
+        "title": "Laravel-Go: Run Migrations",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.run.seed",
+        "title": "Laravel-Go: Run Seeders",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.run.test",
+        "title": "Laravel-Go: Run Tests",
+        "category": "Laravel-Go"
+      },
+      {
+        "command": "laravel-go.run.serve",
+        "title": "Laravel-Go: Serve Application",
+        "category": "Laravel-Go"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "laravel-go.generate.controller",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.generate.model",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.generate.middleware",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.generate.migration",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.generate.test",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.run.migrate",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.run.seed",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.run.test",
+          "when": "resourceLangId == go"
+        },
+        {
+          "command": "laravel-go.run.serve",
+          "when": "resourceLangId == go"
+        }
+      ]
+    },
+    "snippets": [
+      {
+        "language": "go",
+        "path": "./snippets/go.json"
+      }
+    ],
+    "configuration": {
+      "title": "Laravel-Go Framework",
+      "properties": {
+        "laravelGo.artisanPath": {
+          "type": "string",
+          "default": "cmd/artisan",
+          "description": "Path to the Laravel-Go artisan executable"
+        },
+        "laravelGo.projectRoot": {
+          "type": "string",
+          "default": ".",
+          "description": "Root directory of the Laravel-Go project"
+        },
+        "laravelGo.enableCodeCompletion": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable code completion for Laravel-Go framework"
+        },
+        "laravelGo.enableDebugging": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable debugging support for Laravel-Go applications"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+} 

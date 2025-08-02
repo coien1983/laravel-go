@@ -1,0 +1,39 @@
+{
+    "framework": "laravel-go",
+    "language": "go",
+    "architecture": "layered",
+    "patterns": [
+        "repository",
+        "service",
+        "controller",
+        "middleware",
+        "validation"
+    ],
+    "conventions": {
+        "naming": "snake_case",
+        "file_structure": "feature_based",
+        "error_handling": "wrapped_errors",
+        "logging": "structured"
+    },
+    "code_style": {
+        "indentation": "tabs",
+        "line_length": 120,
+        "imports": "grouped",
+        "comments": "documentation"
+    },
+    "best_practices": [
+        "use_framework_error_handling",
+        "implement_layered_architecture",
+        "use_dependency_injection",
+        "write_unit_tests",
+        "use_structured_logging",
+        "implement_performance_monitoring"
+    ],
+    "templates": {
+        "controller": "app/Http/Controllers/",
+        "service": "app/Services/",
+        "model": "app/Models/",
+        "middleware": "app/Http/Middleware/",
+        "repository": "app/Repositories/"
+    }
+}

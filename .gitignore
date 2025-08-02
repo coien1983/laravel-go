@@ -1,0 +1,211 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# Build artifacts
+main
+laravel-go-mcp
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log files
+*.log
+logs/
+storage/logs/
+
+# Cache files
+storage/cache/
+.cache/
+*.cache
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+test.db
+test_*.db
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Upload files
+storage/uploads/
+public/uploads/
+
+# Node modules (if using frontend build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage reports
+coverage.out
+coverage.html
+*.cover
+
+# Profiling data
+*.prof
+
+# Air live reload
+tmp/
+
+# Docker
+.dockerignore
+
+# Kubernetes
+*.kubeconfig
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Laravel-Go specific
+# Generated project files
+examples/*/main
+examples/*/laravel-go-*
+examples/*/test.db
+examples/*/storage/
+examples/*/vendor/
+
+# MCP service specific
+tools/laravel-go-mcp/laravel-go-mcp
+tools/laravel-go-mcp/projects/
+tools/laravel-go-mcp/logs/
+tools/laravel-go-mcp/tmp/
+
+# Performance monitoring data
+*.metrics
+*.prom
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Configuration files with sensitive data
+config/local.php
+config/production.php
+
+# Backup and archive files
+*.tar.gz
+*.zip
+*.rar
+
+# Documentation build files
+docs/_build/
+docs/.doctrees/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Laravel-Go framework specific ignores
+# Generated application files
+app/Http/Controllers/*_test.go
+app/Models/*_test.go
+app/Services/*_test.go
+
+# Framework cache
+framework/cache/
+framework/logs/
+
+# Test coverage
+coverage/
+*.coverprofile
+
+# Benchmark results
+*.bench
+
+# Profiling data
+*.pprof
+
+# Air configuration (development)
+.air.toml
+
+# Local development files
+local/
+dev/ 
