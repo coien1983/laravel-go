@@ -1,0 +1,89 @@
+<idea-plugin>
+    <id>com.laravelgo.plugin</id>
+    <name>Laravel-Go Framework</name>
+    <vendor email="support@laravelgo.dev" url="https://laravelgo.dev">Laravel-Go Team</vendor>
+
+    <description><![CDATA[
+        Comprehensive IDE support for Laravel-Go Framework development in GoLand.
+        
+        Features:
+        - Code generation for controllers, models, middleware, and migrations
+        - Code completion for framework components
+        - Live templates and code snippets
+        - Debug configurations for Laravel-Go applications
+        - Integration with Laravel-Go Artisan commands
+        - Database query builder support
+        - Route management tools
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>org.jetbrains.plugins.go</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Live Templates -->
+        <liveTemplateContext implementation="com.laravelgo.plugin.templates.LaravelGoTemplateContext"/>
+        <defaultLiveTemplatesProvider implementation="com.laravelgo.plugin.templates.LaravelGoTemplatesProvider"/>
+        
+        <!-- Code Completion -->
+        <completion.contributor language="Go" implementationClass="com.laravelgo.plugin.completion.LaravelGoCompletionContributor"/>
+        
+        <!-- Code Inspection -->
+        <localInspection language="Go" displayName="Laravel-Go Framework" groupName="Laravel-Go" enabledByDefault="true" level="WARNING" implementationClass="com.laravelgo.plugin.inspection.LaravelGoInspection"/>
+        
+        <!-- Debug Configuration -->
+        <runConfigurationType implementation="com.laravelgo.plugin.debug.LaravelGoDebugConfigurationType"/>
+        <runConfigurationProducer implementation="com.laravelgo.plugin.debug.LaravelGoRunConfigurationProducer"/>
+        
+        <!-- Project Structure -->
+        <projectStructureDetector implementation="com.laravelgo.plugin.project.LaravelGoProjectStructureDetector"/>
+        
+        <!-- Tool Window -->
+        <toolWindow id="Laravel-Go" secondary="true" icon="AllIcons.General.Modified" anchor="right" factoryClass="com.laravelgo.plugin.toolwindow.LaravelGoToolWindowFactory"/>
+    </extensions>
+
+    <actions>
+        <!-- Generate Actions -->
+        <action id="LaravelGo.GenerateController" class="com.laravelgo.plugin.actions.GenerateControllerAction" text="Generate Controller" description="Generate a new Laravel-Go controller">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoGenerateGroup" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.GenerateModel" class="com.laravelgo.plugin.actions.GenerateModelAction" text="Generate Model" description="Generate a new Laravel-Go model">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoGenerateGroup" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.GenerateMiddleware" class="com.laravelgo.plugin.actions.GenerateMiddlewareAction" text="Generate Middleware" description="Generate a new Laravel-Go middleware">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoGenerateGroup" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.GenerateMigration" class="com.laravelgo.plugin.actions.GenerateMigrationAction" text="Generate Migration" description="Generate a new Laravel-Go migration">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoGenerateGroup" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.GenerateTest" class="com.laravelgo.plugin.actions.GenerateTestAction" text="Generate Test" description="Generate a new Laravel-Go test">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="GoGenerateGroup" anchor="last"/>
+        </action>
+        
+        <!-- Artisan Commands -->
+        <action id="LaravelGo.RunMigrate" class="com.laravelgo.plugin.actions.RunMigrateAction" text="Run Migrations" description="Run Laravel-Go database migrations">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.RunSeed" class="com.laravelgo.plugin.actions.RunSeedAction" text="Run Seeders" description="Run Laravel-Go database seeders">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.RunTest" class="com.laravelgo.plugin.actions.RunTestAction" text="Run Tests" description="Run Laravel-Go tests">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+        
+        <action id="LaravelGo.RunServe" class="com.laravelgo.plugin.actions.RunServeAction" text="Serve Application" description="Start Laravel-Go development server">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin> 

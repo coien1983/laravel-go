@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  {{ .Name }}:
+    build: .
+    ports:
+      - "{{ .Port }}:{{ .Port }}"
+    environment:
+      - APP_ENV={{ .Env }}
+      - APP_DEBUG={{ if eq .Env "development" }}true{{ else }}false{{ end }}
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - {{ .Name }}-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - {{ .Name }}-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: {{ .Name }}
+      POSTGRES_USER: {{ .Name }}
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - {{ .Name }}-network
+
+volumes:
+  redis_data:
+  postgres_data:
+
+networks:
+  {{ .Name }}-network:
+    driver: bridge

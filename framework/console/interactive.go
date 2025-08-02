@@ -46,6 +46,14 @@ type ProjectConfig struct {
 	Profiling            string // "none" | "pprof" | "full"
 	Internationalization string // "none" | "basic" | "full"
 	Localization         string // "none" | "basic" | "full"
+
+	// 部署配置
+	Docker     string // "none" | "basic" | "full"
+	Kubernetes string // "none" | "basic" | "full"
+
+	// 微服务配置
+	GRPC       string // "none" | "basic" | "full"
+	APIGateway string // "none" | "basic" | "full"
 }
 
 // InteractiveConfig 交互式配置
@@ -57,6 +65,316 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	output.Info("🚀 Laravel-Go 项目初始化向导")
 	output.Info("================================")
 	output.Info("")
+
+	// 预设配置选择
+	presetChoice := askChoice("请选择项目类型:", []string{
+		"api - API 服务 (前后端分离，JWT认证，Redis缓存)",
+		"web - Web 应用 (传统MVC，Session认证，SQLite数据库)",
+		"microservice - 微服务 (gRPC，服务发现，分布式队列)",
+		"fullstack - 全栈应用 (Vue.js前端，完整功能栈)",
+		"minimal - 最小化应用 (基础功能，快速原型)",
+		"custom - 自定义配置 (手动选择所有选项)",
+	}, "api", output)
+
+	// 根据预设配置设置默认值
+	switch presetChoice {
+	case "api":
+		config = GetApiPreset(projectName)
+	case "web":
+		config = GetWebPreset(projectName)
+	case "microservice":
+		config = GetMicroservicePreset(projectName)
+	case "fullstack":
+		config = GetFullstackPreset(projectName)
+	case "minimal":
+		config = GetMinimalPreset(projectName)
+	case "custom":
+		config = GetCustomConfig(projectName, output)
+	}
+
+	// 显示配置摘要
+	output.Info("")
+	output.Success("✅ 配置完成！")
+	output.Info("")
+	output.Info("📋 项目配置摘要:")
+	output.Info("")
+	output.Info("🏗️  基础架构:")
+	output.Info(fmt.Sprintf("   项目名称: %s", config.Name))
+	output.Info(fmt.Sprintf("   架构模式: %s", config.Architecture))
+	output.Info(fmt.Sprintf("   数据库: %s", config.Database))
+	output.Info(fmt.Sprintf("   缓存: %s", config.Cache))
+	output.Info(fmt.Sprintf("   队列: %s", config.Queue))
+	output.Info(fmt.Sprintf("   前端: %s", config.Frontend))
+	output.Info(fmt.Sprintf("   认证: %s", config.Auth))
+	output.Info(fmt.Sprintf("   API: %s", config.API))
+	output.Info(fmt.Sprintf("   测试: %s", config.Testing))
+	output.Info(fmt.Sprintf("   文档: %s", config.Documentation))
+	output.Info(fmt.Sprintf("   监控: %s", config.Monitoring))
+	output.Info(fmt.Sprintf("   日志: %s", config.Logging))
+	output.Info("")
+	output.Info("🔧 框架功能:")
+	output.Info(fmt.Sprintf("   控制台: %s", config.Console))
+	output.Info(fmt.Sprintf("   事件系统: %s", config.Events))
+	output.Info(fmt.Sprintf("   数据验证: %s", config.Validation))
+	output.Info(fmt.Sprintf("   中间件: %s", config.Middleware))
+	output.Info(fmt.Sprintf("   路由系统: %s", config.Routing))
+	output.Info(fmt.Sprintf("   会话管理: %s", config.Session))
+	output.Info(fmt.Sprintf("   邮件系统: %s", config.Mail))
+	output.Info(fmt.Sprintf("   通知系统: %s", config.Notifications))
+	output.Info(fmt.Sprintf("   文件存储: %s", config.FileStorage))
+	output.Info(fmt.Sprintf("   加密功能: %s", config.Encryption))
+	output.Info(fmt.Sprintf("   密码哈希: %s", config.Hashing))
+	output.Info(fmt.Sprintf("   分页功能: %s", config.Pagination))
+	output.Info(fmt.Sprintf("   限流功能: %s", config.RateLimiting))
+	output.Info(fmt.Sprintf("   CORS 支持: %s", config.CORS))
+	output.Info(fmt.Sprintf("   压缩功能: %s", config.Compression))
+	output.Info(fmt.Sprintf("   WebSocket: %s", config.WebSockets))
+	output.Info(fmt.Sprintf("   任务调度: %s", config.TaskScheduling))
+	output.Info(fmt.Sprintf("   定时器: %s", config.Timer))
+	output.Info(fmt.Sprintf("   健康检查: %s", config.HealthChecks))
+	output.Info(fmt.Sprintf("   指标监控: %s", config.Metrics))
+	output.Info(fmt.Sprintf("   性能分析: %s", config.Profiling))
+	output.Info(fmt.Sprintf("   国际化: %s", config.Internationalization))
+	output.Info(fmt.Sprintf("   本地化: %s", config.Localization))
+	output.Info("")
+	output.Info("🐳 部署配置:")
+	output.Info(fmt.Sprintf("   Docker: %s", config.Docker))
+	output.Info(fmt.Sprintf("   Kubernetes: %s", config.Kubernetes))
+	output.Info("")
+	output.Info("🔗 微服务配置:")
+	output.Info(fmt.Sprintf("   gRPC: %s", config.GRPC))
+	output.Info(fmt.Sprintf("   API Gateway: %s", config.APIGateway))
+	output.Info("")
+
+	return config
+}
+
+// GetApiPreset API服务预设配置
+func GetApiPreset(projectName string) *ProjectConfig {
+	return &ProjectConfig{
+		Name:                 projectName,
+		Architecture:         "monolithic",
+		Database:             "postgresql",
+		Cache:                "redis",
+		Queue:                "redis",
+		Frontend:             "api",
+		Auth:                 "jwt",
+		API:                  "rest",
+		Testing:              "integration",
+		Documentation:        "swagger",
+		Monitoring:           "prometheus",
+		Logging:              "json",
+		Console:              "full",
+		Events:               "basic",
+		Validation:           "full",
+		Middleware:           "full",
+		Routing:              "full",
+		Session:              "none",
+		Mail:                 "none",
+		Notifications:        "none",
+		FileStorage:          "local",
+		Encryption:           "basic",
+		Hashing:              "argon2",
+		Pagination:           "advanced",
+		RateLimiting:         "advanced",
+		CORS:                 "full",
+		Compression:          "gzip",
+		WebSockets:           "none",
+		TaskScheduling:       "basic",
+		Timer:                "cron",
+		HealthChecks:         "full",
+		Metrics:              "prometheus",
+		Profiling:            "pprof",
+		Internationalization: "none",
+		Localization:         "none",
+		Docker:               "none",
+		Kubernetes:           "none",
+	}
+}
+
+// GetWebPreset Web应用预设配置
+func GetWebPreset(projectName string) *ProjectConfig {
+	return &ProjectConfig{
+		Name:                 projectName,
+		Architecture:         "monolithic",
+		Database:             "mysql",
+		Cache:                "redis",
+		Queue:                "database",
+		Frontend:             "blade",
+		Auth:                 "session",
+		API:                  "rest",
+		Testing:              "both",
+		Documentation:        "none",
+		Monitoring:           "basic",
+		Logging:              "both",
+		Console:              "full",
+		Events:               "full",
+		Validation:           "full",
+		Middleware:           "full",
+		Routing:              "full",
+		Session:              "redis",
+		Mail:                 "smtp",
+		Notifications:        "database",
+		FileStorage:          "local",
+		Encryption:           "full",
+		Hashing:              "bcrypt",
+		Pagination:           "advanced",
+		RateLimiting:         "basic",
+		CORS:                 "basic",
+		Compression:          "gzip",
+		WebSockets:           "basic",
+		TaskScheduling:       "full",
+		Timer:                "full",
+		HealthChecks:         "basic",
+		Metrics:              "basic",
+		Profiling:            "none",
+		Internationalization: "basic",
+		Localization:         "basic",
+		Docker:               "basic",
+		Kubernetes:           "none",
+	}
+}
+
+// GetMicroservicePreset 微服务预设配置
+func GetMicroservicePreset(projectName string) *ProjectConfig {
+	return &ProjectConfig{
+		Name:                 projectName,
+		Architecture:         "microservice",
+		Database:             "postgresql",
+		Cache:                "redis",
+		Queue:                "kafka",
+		Frontend:             "api",
+		Auth:                 "jwt",
+		API:                  "both",
+		Testing:              "integration",
+		Documentation:        "swagger",
+		Monitoring:           "prometheus",
+		Logging:              "json",
+		Console:              "custom",
+		Events:               "full",
+		Validation:           "full",
+		Middleware:           "full",
+		Routing:              "full",
+		Session:              "none",
+		Mail:                 "none",
+		Notifications:        "slack",
+		FileStorage:          "s3",
+		Encryption:           "full",
+		Hashing:              "argon2",
+		Pagination:           "advanced",
+		RateLimiting:         "advanced",
+		CORS:                 "full",
+		Compression:          "brotli",
+		WebSockets:           "full",
+		TaskScheduling:       "full",
+		Timer:                "full",
+		HealthChecks:         "full",
+		Metrics:              "prometheus",
+		Profiling:            "full",
+		Internationalization: "full",
+		Localization:         "full",
+		Docker:               "full",
+		Kubernetes:           "full",
+		GRPC:                 "full",
+		APIGateway:           "full",
+	}
+}
+
+// GetFullstackPreset 全栈应用预设配置
+func GetFullstackPreset(projectName string) *ProjectConfig {
+	return &ProjectConfig{
+		Name:                 projectName,
+		Architecture:         "monolithic",
+		Database:             "postgresql",
+		Cache:                "redis",
+		Queue:                "redis",
+		Frontend:             "vue",
+		Auth:                 "jwt",
+		API:                  "rest",
+		Testing:              "both",
+		Documentation:        "swagger",
+		Monitoring:           "prometheus",
+		Logging:              "both",
+		Console:              "full",
+		Events:               "full",
+		Validation:           "full",
+		Middleware:           "full",
+		Routing:              "full",
+		Session:              "redis",
+		Mail:                 "sendgrid",
+		Notifications:        "slack",
+		FileStorage:          "s3",
+		Encryption:           "full",
+		Hashing:              "argon2",
+		Pagination:           "advanced",
+		RateLimiting:         "advanced",
+		CORS:                 "full",
+		Compression:          "brotli",
+		WebSockets:           "full",
+		TaskScheduling:       "full",
+		Timer:                "full",
+		HealthChecks:         "full",
+		Metrics:              "prometheus",
+		Profiling:            "full",
+		Internationalization: "full",
+		Localization:         "full",
+		Docker:               "full",
+		Kubernetes:           "full",
+	}
+}
+
+// GetMinimalPreset 最小化应用预设配置
+func GetMinimalPreset(projectName string) *ProjectConfig {
+	return &ProjectConfig{
+		Name:                 projectName,
+		Architecture:         "monolithic",
+		Database:             "sqlite",
+		Cache:                "memory",
+		Queue:                "memory",
+		Frontend:             "api",
+		Auth:                 "none",
+		API:                  "rest",
+		Testing:              "none",
+		Documentation:        "none",
+		Monitoring:           "none",
+		Logging:              "file",
+		Console:              "basic",
+		Events:               "none",
+		Validation:           "basic",
+		Middleware:           "basic",
+		Routing:              "basic",
+		Session:              "none",
+		Mail:                 "none",
+		Notifications:        "none",
+		FileStorage:          "local",
+		Encryption:           "none",
+		Hashing:              "none",
+		Pagination:           "none",
+		RateLimiting:         "none",
+		CORS:                 "none",
+		Compression:          "none",
+		WebSockets:           "none",
+		TaskScheduling:       "none",
+		Timer:                "none",
+		HealthChecks:         "none",
+		Metrics:              "none",
+		Profiling:            "none",
+		Internationalization: "none",
+		Localization:         "none",
+		Docker:               "none",
+		Kubernetes:           "none",
+	}
+}
+
+// GetCustomConfig 自定义配置（原来的完整交互式配置）
+func GetCustomConfig(projectName string, output Output) *ProjectConfig {
+	config := &ProjectConfig{
+		Name: projectName,
+	}
+
+	output.Info("")
+	output.Info("🔧 自定义配置")
+	output.Info("==========")
 
 	// 架构选择
 	config.Architecture = askChoice("请选择项目架构:", []string{
@@ -254,7 +572,7 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 		"brotli - Brotli 压缩 (现代)",
 	}, "gzip", output)
 
-	// WebSocket 支持
+	// WebSocket
 	config.WebSockets = askChoice("请选择 WebSocket 支持:", []string{
 		"none - 无 WebSocket",
 		"basic - 基础 WebSocket",
@@ -268,7 +586,7 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 		"full - 完整调度 (复杂表达式)",
 	}, "none", output)
 
-	// 定时器
+	// 定时器功能
 	config.Timer = askChoice("请选择定时器功能:", []string{
 		"none - 无定时器",
 		"cron - Cron 表达式定时器 (Unix 风格)",
@@ -312,49 +630,22 @@ func InteractiveConfig(projectName string, output Output) *ProjectConfig {
 	}, "none", output)
 
 	output.Info("")
-	output.Success("✅ 配置完成！")
-	output.Info("")
-	output.Info("📋 项目配置摘要:")
-	output.Info("")
-	output.Info("🏗️  基础架构:")
-	output.Info(fmt.Sprintf("   项目名称: %s", config.Name))
-	output.Info(fmt.Sprintf("   架构模式: %s", config.Architecture))
-	output.Info(fmt.Sprintf("   数据库: %s", config.Database))
-	output.Info(fmt.Sprintf("   缓存: %s", config.Cache))
-	output.Info(fmt.Sprintf("   队列: %s", config.Queue))
-	output.Info(fmt.Sprintf("   前端: %s", config.Frontend))
-	output.Info(fmt.Sprintf("   认证: %s", config.Auth))
-	output.Info(fmt.Sprintf("   API: %s", config.API))
-	output.Info(fmt.Sprintf("   测试: %s", config.Testing))
-	output.Info(fmt.Sprintf("   文档: %s", config.Documentation))
-	output.Info(fmt.Sprintf("   监控: %s", config.Monitoring))
-	output.Info(fmt.Sprintf("   日志: %s", config.Logging))
-	output.Info("")
-	output.Info("🔧 框架功能:")
-	output.Info(fmt.Sprintf("   控制台: %s", config.Console))
-	output.Info(fmt.Sprintf("   事件系统: %s", config.Events))
-	output.Info(fmt.Sprintf("   数据验证: %s", config.Validation))
-	output.Info(fmt.Sprintf("   中间件: %s", config.Middleware))
-	output.Info(fmt.Sprintf("   路由系统: %s", config.Routing))
-	output.Info(fmt.Sprintf("   会话管理: %s", config.Session))
-	output.Info(fmt.Sprintf("   邮件系统: %s", config.Mail))
-	output.Info(fmt.Sprintf("   通知系统: %s", config.Notifications))
-	output.Info(fmt.Sprintf("   文件存储: %s", config.FileStorage))
-	output.Info(fmt.Sprintf("   加密功能: %s", config.Encryption))
-	output.Info(fmt.Sprintf("   密码哈希: %s", config.Hashing))
-	output.Info(fmt.Sprintf("   分页功能: %s", config.Pagination))
-	output.Info(fmt.Sprintf("   限流功能: %s", config.RateLimiting))
-	output.Info(fmt.Sprintf("   CORS 支持: %s", config.CORS))
-	output.Info(fmt.Sprintf("   压缩功能: %s", config.Compression))
-	output.Info(fmt.Sprintf("   WebSocket: %s", config.WebSockets))
-	output.Info(fmt.Sprintf("   任务调度: %s", config.TaskScheduling))
-	output.Info(fmt.Sprintf("   定时器: %s", config.Timer))
-	output.Info(fmt.Sprintf("   健康检查: %s", config.HealthChecks))
-	output.Info(fmt.Sprintf("   指标监控: %s", config.Metrics))
-	output.Info(fmt.Sprintf("   性能分析: %s", config.Profiling))
-	output.Info(fmt.Sprintf("   国际化: %s", config.Internationalization))
-	output.Info(fmt.Sprintf("   本地化: %s", config.Localization))
-	output.Info("")
+	output.Info("🐳 部署配置")
+	output.Info("==========")
+
+	// Docker 配置
+	config.Docker = askChoice("请选择 Docker 支持:", []string{
+		"none - 无 Docker 支持",
+		"basic - 基础 Dockerfile",
+		"full - 完整 Docker 配置 (包含 docker-compose)",
+	}, "none", output)
+
+	// Kubernetes 配置
+	config.Kubernetes = askChoice("请选择 Kubernetes 支持:", []string{
+		"none - 无 Kubernetes 支持",
+		"basic - 基础部署配置",
+		"full - 完整 K8s 配置 (包含监控、服务发现)",
+	}, "none", output)
 
 	return config
 }

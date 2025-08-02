@@ -1,0 +1,5 @@
+go 1.23.5
+
+use ./microservice-demo
+
+use ./framework

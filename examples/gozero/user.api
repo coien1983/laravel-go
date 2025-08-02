@@ -1,0 +1,107 @@
+syntax = "v1"
+
+info(
+	title: "用户管理API"
+	desc: "用户管理相关的API接口"
+	author: "Laravel-Go"
+	version: "1.0"
+)
+
+type (
+	// 用户信息
+	User {
+		Id        int64  `json:"id"`
+		Name      string `json:"name"`
+		Email     string `json:"email"`
+		Phone     string `json:"phone"`
+		Age       int32  `json:"age"`
+		CreatedAt string `json:"created_at"`
+		UpdatedAt string `json:"updated_at"`
+	}
+
+	// 创建用户请求
+	CreateUserReq {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+		Phone string `json:"phone"`
+		Age   int32  `json:"age"`
+	}
+
+	// 创建用户响应
+	CreateUserResp {
+		User    User   `json:"user"`
+		Message string `json:"message"`
+	}
+
+	// 获取用户请求
+	GetUserReq {
+		Id int64 `path:"id"`
+	}
+
+	// 获取用户响应
+	GetUserResp {
+		User User `json:"user"`
+	}
+
+	// 更新用户请求
+	UpdateUserReq {
+		Id    int64  `path:"id"`
+		Name  string `json:"name,optional"`
+		Email string `json:"email,optional"`
+		Phone string `json:"phone,optional"`
+		Age   int32  `json:"age,optional"`
+	}
+
+	// 更新用户响应
+	UpdateUserResp {
+		User    User   `json:"user"`
+		Message string `json:"message"`
+	}
+
+	// 删除用户请求
+	DeleteUserReq {
+		Id int64 `path:"id"`
+	}
+
+	// 删除用户响应
+	DeleteUserResp {
+		Message string `json:"message"`
+	}
+
+	// 用户列表请求
+	ListUsersReq {
+		Page    int32  `form:"page,default=1"`
+		Size    int32  `form:"size,default=10"`
+		Keyword string `form:"keyword,optional"`
+	}
+
+	// 用户列表响应
+	ListUsersResp {
+		Users []User `json:"users"`
+		Total int32  `json:"total"`
+		Page  int32  `json:"page"`
+		Size  int32  `json:"size"`
+	}
+)
+
+service user-api {
+	@doc "创建用户"
+	@handler createUser
+	post /api/users (CreateUserReq) returns (CreateUserResp)
+
+	@doc "获取用户详情"
+	@handler getUser
+	get /api/users/:id (GetUserReq) returns (GetUserResp)
+
+	@doc "更新用户信息"
+	@handler updateUser
+	put /api/users/:id (UpdateUserReq) returns (UpdateUserResp)
+
+	@doc "删除用户"
+	@handler deleteUser
+	delete /api/users/:id (DeleteUserReq) returns (DeleteUserResp)
+
+	@doc "获取用户列表"
+	@handler listUsers
+	get /api/users (ListUsersReq) returns (ListUsersResp)
+} 

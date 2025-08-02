@@ -1,8 +1,9 @@
 package main
 
 import (
-	"laravel-go/framework/console"
 	"os"
+
+	"github.com/coien1983/laravel-go/framework/console"
 )
 
 func main() {
@@ -10,6 +11,7 @@ func main() {
 	app := console.NewApplication("Laravel-Go Artisan", "1.0.0")
 	output := console.NewConsoleOutput()
 	generator := console.NewGenerator(output)
+	goZeroGenerator := console.NewGoZeroGenerator(output)
 
 	// =============================================================================
 	// 项目初始化命令
@@ -26,10 +28,10 @@ func main() {
 	app.AddCommand(console.NewMakeTestCommand(generator))
 
 	// =============================================================================
-	// 部署配置命令
+	// go-zero 增强命令 (类似 goctl 功能)
 	// =============================================================================
-	app.AddCommand(console.NewMakeDockerCommand(generator))
-	app.AddCommand(console.NewMakeK8sCommand(generator))
+	app.AddCommand(console.NewGoZeroMakeRpcCommand(goZeroGenerator))
+	app.AddCommand(console.NewGoZeroMakeApiCommand(goZeroGenerator))
 
 	// =============================================================================
 	// 项目维护命令
@@ -42,6 +44,15 @@ func main() {
 	// =============================================================================
 	app.AddCommand(console.NewMakeApiCommand(generator))
 	app.AddCommand(console.NewMakeCrudCommand(generator))
+
+	// =============================================================================
+	// 模块管理命令
+	// =============================================================================
+	app.AddCommand(console.NewAddModuleCommand(generator))
+	app.AddCommand(console.NewAddServiceCommand(generator))
+	app.AddCommand(console.NewAddRepositoryCommand(generator))
+	app.AddCommand(console.NewAddValidatorCommand(generator))
+	app.AddCommand(console.NewAddEventCommand(generator))
 
 	// =============================================================================
 	// 项目信息命令

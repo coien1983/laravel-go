@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strings"
 	"text/tabwriter"
 )
 
@@ -237,16 +238,13 @@ func (app *Application) parseInput(args []string, command Command) (Input, error
 			flagSet.StringVar(&value, opt.Name, defaultValue, opt.Description)
 			options[opt.Name] = &value
 		case "bool":
-			var value bool
-			defaultValue := false
-			if opt.Default != nil {
-				defaultValue = opt.Default.(bool)
-			}
+			// 对于布尔标志，使用字符串标志然后手动解析
+			var strValue string
 			if opt.ShortName != "" {
-				flagSet.BoolVar(&value, opt.ShortName, defaultValue, opt.Description)
+				flagSet.StringVar(&strValue, opt.ShortName, "", opt.Description)
 			}
-			flagSet.BoolVar(&value, opt.Name, defaultValue, opt.Description)
-			options[opt.Name] = &value
+			flagSet.StringVar(&strValue, opt.Name, "", opt.Description)
+			options[opt.Name] = &strValue
 		case "int":
 			var value int
 			defaultValue := 0
@@ -267,6 +265,33 @@ func (app *Application) parseInput(args []string, command Command) (Input, error
 		return nil, err
 	}
 
+	// 手动处理布尔标志
+	for _, arg := range args {
+		if strings.HasPrefix(arg, "--") {
+			flagName := strings.TrimPrefix(arg, "--")
+			if isBoolOption(flagName, command.GetOptions()) {
+				// 设置布尔标志为true
+				if ptr, exists := options[flagName]; exists {
+					if strPtr, ok := ptr.(*string); ok {
+						*strPtr = "true"
+					}
+				}
+			}
+		} else if strings.HasPrefix(arg, "-") && len(arg) == 2 {
+			flagName := string(arg[1])
+			// 查找对应的短名称选项
+			for _, opt := range command.GetOptions() {
+				if opt.ShortName == flagName && opt.Type == "bool" {
+					if ptr, exists := options[opt.Name]; exists {
+						if strPtr, ok := ptr.(*string); ok {
+							*strPtr = "true"
+						}
+					}
+				}
+			}
+		}
+	}
+
 	// 获取参数
 	arguments := make(map[string]interface{})
 	args = flagSet.Args()
@@ -285,7 +310,12 @@ func (app *Application) parseInput(args []string, command Command) (Input, error
 	for name, ptr := range options {
 		switch v := ptr.(type) {
 		case *string:
-			optionValues[name] = *v
+			// 检查是否是布尔选项
+			if isBoolOption(name, command.GetOptions()) {
+				optionValues[name] = *v != ""
+			} else {
+				optionValues[name] = *v
+			}
 		case *bool:
 			optionValues[name] = *v
 		case *int:
@@ -297,6 +327,16 @@ func (app *Application) parseInput(args []string, command Command) (Input, error
 		arguments: arguments,
 		options:   optionValues,
 	}, nil
+}
+
+// isBoolOption 检查选项是否为布尔类型
+func isBoolOption(name string, options []Option) bool {
+	for _, opt := range options {
+		if opt.Name == name && opt.Type == "bool" {
+			return true
+		}
+	}
+	return false
 }
 
 // ConsoleInput 控制台输入实现

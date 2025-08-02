@@ -11,7 +11,7 @@
 - 🔧 **完整工具链**: 包含命令行工具、ORM、模板引擎等
 - 🛡️ **安全可靠**: 内置安全特性和最佳实践
 - 📦 **开箱即用**: 完整的 Web 开发、API 和微服务支持
-- 🐳 **容器化**: 支持 Docker 和 Kubernetes 部署
+- 🚀 **轻量级**: 专注于核心功能，避免不必要的复杂性
 
 ## 快速开始
 
@@ -280,61 +280,7 @@ type AppConfig struct {
 
 ## 部署
 
-### Docker
-
-```dockerfile
-FROM golang:1.20-alpine AS builder
-
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-
-COPY . .
-RUN go build -o main .
-
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-
-COPY --from=builder /app/main .
-COPY --from=builder /app/.env .
-
-EXPOSE 8080
-CMD ["./main"]
-```
-
-### Kubernetes
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: laravel-go-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: laravel-go-app
-  template:
-    metadata:
-      labels:
-        app: laravel-go-app
-    spec:
-      containers:
-        - name: app
-          image: laravel-go-app:latest
-          ports:
-            - containerPort: 8080
-          env:
-            - name: APP_ENV
-              value: "production"
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-```
+Docker 和 Kubernetes 支持已被移除，以保持框架的轻量级和专注于核心功能。
 
 ## 测试
 
